@@ -220,7 +220,7 @@
                 <td colspan="8"></td>
             </tr>
             <tr class="bg-grey {{ $bulletinData['semestre'] == 1 ? 'text-center' : '' }} align-middle">
-                <td colspan="2">Crédit(s) Validé(s) : <span class="text-red">{{ $bulletinData['total_credit_validee'] }} / {{ $bulletinData['total_credit'] }}</span></td>
+                <td colspan="2">Crédit(s) Validé(s) : <span class="text-black">{{ $bulletinData['total_credit_validee'] }} / {{ $bulletinData['total_credit'] }}</span></td>
                 <td colspan="2">Moy.Semestre : <span class="text-red">{{ $bulletinService->nombreFormatDeuxDecimal($bulletinData['moyenne_finale']) }}</span></td>
                 <td colspan="4">Résultats : <span class="text-red">{{ $bulletinData['resultat_final'] }}</span> </td>
             </tr>
@@ -237,7 +237,7 @@
                     <td colspan="4">Résultat semestre 1 : <span class="text-red">{{ $bulletinData['resultat_semestre_1'] }}</span> </td>
                 </tr>
                 <tr class="bg-grey align-middle">
-                    <td colspan="2">Crédit(s) Validé(s) : <span class="text-red">{{ $total_credits_valides }} / {{ $total_credits }}</span></td>
+                    <td colspan="2">Crédit(s) Validé(s) : <span class="text-black">{{ $total_credits_valides }} / {{ $total_credits }}</span></td>
                     <td colspan="2">Moy.Semestre : <span class="text-red">{{ $bulletinService->nombreFormatDeuxDecimal($moyenne_annuelle) }}</span></td>
                     <td colspan="4">Résultats : <span class="text-red">{{ $decision_jury }}</span> </td>
                 </tr>
