@@ -1,1 +1,43 @@
+# .env file contains sensitive environment variables
 .env
+
+# Laravel specific directories
+/vendor
+/node_modules
+
+# Ignore the compiled blade templates
+/storage/framework/views
+
+# Ignore the compiled application cache
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+
+# Ignore storage logs
+/storage/logs
+
+# Ignore Laravel Mix specific files (if you are using it)
+npm-debug.log
+yarn-error.log
+public/hot
+public/storage
+/.phpunit.result.cache
+/.php_cs.cache
+/coverage
+.phpunit.result.cache
+
+# Ignore IDE-specific files (optional)
+.vscode
+.idea
+
+# Ignore any backup or temporary files
+*.bak
+*.tmp
+
+# Ignore OS generated files (optional)
+/.DS_Store
+/.AppleDouble
+/.LSOverride
+Thumbs.db
+ehthumbs.db
