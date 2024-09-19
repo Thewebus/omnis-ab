@@ -219,7 +219,7 @@ Route::group(['prefix' => 'scolarite', 'middleware' => ['auth:admins', 'scolarit
     Route::get('/profil', [PersonnelDefaultController::class, 'profil'])->name('admin.personnel-profil');
     Route::post('/information-post', [PersonnelDefaultController::class, 'changeInformationsPost'])->name('admin.personnel-change-informations-post');
     Route::post('/change-password', [PersonnelDefaultController::class, 'changePassword'])->name('admin.personnel-change-password');
-    Route::post('/logout', [PersonnelAuthenticationController::class, 'logout'])->name('admin.logout');
+    //Route::post('/logout', [PersonnelAuthenticationController::class, 'logout'])->name('admin.logout');
 
     Route::get('liste-classe-etudiants/{classe_id}', [PersonnelDefaultController::class, 'listClasseEtudiants'])->name('admin.scolarite-liste-classe-etudiants');
 
