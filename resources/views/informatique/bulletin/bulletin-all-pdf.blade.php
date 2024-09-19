@@ -254,7 +254,7 @@
                     <p style="margin-left:30rem">
                         {{ $signataire->fonction ?? 'Le Président du Conseil Scientifique' }}
                     </p>
-                    <p style="margin-left: 30rem; margin-top:4rem">
+                    <p style="margin-left: 30rem; margin-top:4rem; coordonne-ua">
                         {{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}
                     </p>
                 </td>

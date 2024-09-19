@@ -367,7 +367,7 @@
                                                             <p class="text-end mb-5">
                                                                 {{ $signataire->fonction ?? 'Le Président du Conseil Scientifique' }}
                                                             </p>
-                                                            <p class="text-end mt-5">
+                                                            <p class="text-end mt-5; coordonne-ua">
                                                                 {{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}
                                                             </p>
                                                         </td>

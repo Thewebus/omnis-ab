@@ -436,7 +436,7 @@
                 <td colspan="4"><strong>{{ $bulletinData['semestre'] == 2 ? 'BILAN ANNUEL : Moy .An : ' . $moyAnnuelle . ' / Rang : ' . $rangAnnuel . 'e' : 'MENTION' }}</strong> </td>
                 <td colspan="3" rowspan="4">
                     <div><strong><u>{{ $signataire->fonction ?? 'Le  Président du Conseil Scientifique' }}</u></strong>  </div>
-                    <div style="margin-top: 5em"><strong>{{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}</strong></div> 
+                    <div style="margin-top: 5em; coordonne-ua"><strong>{{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}</strong></div> 
                 </td>
             </tr>
             @if ($bulletinData['semestre'] == 2)

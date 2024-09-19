@@ -115,7 +115,7 @@
                                 <div class="mb-3 row">
                                     <label class="col-sm-3 col-form-label">Pr. conseil Scientifique</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control @error('president') is-invalid @enderror" type="text" name="president" value="{{ old("president") ?? 'Prof. HAUHOUOT Asseypo Antoine' }}" placeholder="Président" />
+                                        <input class="form-control coordonne-ua @error('president') is-invalid @enderror" type="text" name="president" value="{{ old("president") ?? 'Prof. HAUHOUOT Asseypo Antoine' }}" placeholder="Président" />
                                         @error('president')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
