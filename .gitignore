@@ -37,6 +37,7 @@ public/storage
 
 # Ignore OS generated files (optional)
 /.DS_Store
+.DS_Store
 /.AppleDouble
 /.LSOverride
 Thumbs.db
