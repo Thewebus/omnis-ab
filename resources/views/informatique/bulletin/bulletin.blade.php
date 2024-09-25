@@ -333,9 +333,9 @@
                                                     </tr>
                                                     
                                                     <tr class="bg-grey text-center align-middle">
-                                                        <td colspan="3">Crédit(s) Validé(s) : <span class="text-black">{{ $creditValides }} / {{ $bulletinData['total_credit'] }}</span></td>
-                                                        <td colspan="2">Moy.Semestre : <span class="text-black">{{ $bulletinService->nombreFormatDeuxDecimal($bulletinData['moyenne_finale']) }}</span></td>
-                                                        <td colspan="3">Résultats : <span class="text-black"> {{ $bulletinData['resultat_final'] }}</span> </td>
+                                                        <td colspan="3">Crédit(s) Validé(s) : <span style="color: black">{{ $creditValides }} / {{ $bulletinData['total_credit'] }}</span></td>
+                                                        <td colspan="2">Moy.Semestre : <span style="color: black">{{ $bulletinService->nombreFormatDeuxDecimal($bulletinData['moyenne_finale']) }}</span></td>
+                                                        <td colspan="3">Résultats : <span style="color: black"> {{ $bulletinData['resultat_final'] }}</span> </td>
                                                     </tr>
                                                     @if ($bulletinData['semestre'] == 2)
                                                         @php
@@ -345,14 +345,14 @@
                                                             $moyenne_annuelle = ($bulletinData['moyenne_finale'] + $bulletinData['moyenne_semestre_1']) / 2;
                                                         @endphp
                                                         <tr class="bg-grey text-center align-middle">
-                                                            <td colspan="3">Crédit(s) Validé(s) Semestre 1 : <span class="text-black">{{ $bulletinData['credits_validee_semestre_1'] }} / {{ $bulletinData['total_credits_semestre_1'] }}</span></td>
-                                                            <td colspan="2">Moy.Semestre 1 : <span class="text-black">{{ $bulletinService->nombreFormatDeuxDecimal($bulletinData['moyenne_semestre_1']) }}</span></td>
-                                                            <td colspan="3">Résultat semestre 1 : <span class="text-black"> {{ $bulletinData['resultat_semestre_1'] }}</span> </td>
+                                                            <td colspan="3">Crédit(s) Validé(s) Semestre 1 : <span style="color: black">{{ $bulletinData['credits_validee_semestre_1'] }} / {{ $bulletinData['total_credits_semestre_1'] }}</span></td>
+                                                            <td colspan="2">Moy.Semestre 1 : <span style="color: black">{{ $bulletinService->nombreFormatDeuxDecimal($bulletinData['moyenne_semestre_1']) }}</span></td>
+                                                            <td colspan="3">Résultat semestre 1 : <span style="color: black"> {{ $bulletinData['resultat_semestre_1'] }}</span> </td>
                                                         </tr>
                                                         <tr class="bg-grey text-center align-middle">
-                                                            <td colspan="3">Total Crédit(s) Validé(s) : <span class="text-black">{{ $total_credits_valides }} / {{ $total_credits }}</span></td>
-                                                            <td colspan="2">Moy.Annuelle : <span class="text-black">{{ $bulletinService->nombreFormatDeuxDecimal($moyenne_annuelle) }}</span></td>
-                                                            <td colspan="3">Décision du jury : <span class="text-black"> {{ $decision_jury }}</span> </td>
+                                                            <td colspan="3">Total Crédit(s) Validé(s) : <span style="color: black">{{ $total_credits_valides }} / {{ $total_credits }}</span></td>
+                                                            <td colspan="2">Moy.Annuelle : <span style="color: black">{{ $bulletinService->nombreFormatDeuxDecimal($moyenne_annuelle) }}</span></td>
+                                                            <td colspan="3">Décision du jury : <span style="color: black"> {{ $decision_jury }}</span> </td>
                                                         </tr>
                                                     @endif
                                                     <tr>
