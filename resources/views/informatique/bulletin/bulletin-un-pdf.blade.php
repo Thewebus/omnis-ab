@@ -415,10 +415,10 @@
                             @elseif(env('OWNER') == 'ua_sp') San-Pedro,
                             @endif le {{ date('d/m/Y') }} <br>
                     </p>
-                    <p style="margin-left:30rem">
+                    <p style="margin-left: 10rem">
                         {{ $signataire->fonction ?? 'Le Président du Conseil Scientifique' }}
                     </p>
-                    <p style="margin-left: 30rem; margin-top:4rem; coordonne-ua">
+                    <p style="margin-left: 10rem; margin-top:4rem; coordonne-ua">
                         {{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}
                     </p>
                 </td>
