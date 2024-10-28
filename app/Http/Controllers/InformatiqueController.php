@@ -308,7 +308,7 @@ class InformatiqueController extends Controller
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $inscription = Inscription::findOrFail($inscriptionId);
         $etudiant = $inscription->etudiant;
-        $inscription = Inscription::where('annee_academique_id', $anneeAcademique->id)->where('user_id', $etudiant->id)->first();
+        // $inscription = Inscription::where('annee_academique_id', $anneeAcademique->id)->where('user_id', $etudiant->id)->first();
         $classes = Classe::orderBy('nom', 'ASC')->get();
         $facultes = Faculte::orderBy('nom', 'ASC')->get();
         return view('informatique.inscription.inscription-modif-form', compact('inscription', 'etudiant', 'classes', 'facultes'));

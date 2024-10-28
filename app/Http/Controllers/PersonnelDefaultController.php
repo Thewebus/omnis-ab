@@ -276,8 +276,8 @@ class PersonnelDefaultController extends Controller
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $etudiants = User::whereHas('inscriptions', function(Builder $query) use ($anneeAcademique) {
             $query->where('valide', 1)->where('annee_academique_id', $anneeAcademique->id);
-        })->get();
-        return view('personnels.inscription.liste-etudiants', compact('etudiants'));
+        })->orderBy('fullname', 'asc')->get();
+        return view('personnels.inscription.liste-etudiants', compact('etudiants', 'anneeAcademique'));
     }
 
     public function inscriptionDetails($id) {
@@ -313,6 +313,10 @@ class PersonnelDefaultController extends Controller
             'statut' => 'required|in:affecté,non affecté,réaffecté',
             'niveau_etude_2' => 'required|string',
             'faculte' => 'required|integer',
+            'id_permanent' => ['required', 'string'],
+            'numero_table_bac' => ['required', 'string'],
+            'code_ep' => ['required', 'string'],
+            'emargement' => ['required', 'string'],
             'date_premiere_entree' => ['required', 'digits:4'],
             'classe' => ['required', 'integer'],
             'matricule' => ['required', 'string'],
@@ -410,6 +414,10 @@ class PersonnelDefaultController extends Controller
             // 'password' => "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
             'nationalite' => $request->nationalite,
             'matricule_etudiant' => $request->matricule,
+            'id_permanent' => $request->id_permanent,
+            'numero_table_bac' => $request->numero_table_bac,
+            'code_ep' => $request->code_ep,
+            'emargement' => $request->emargement,
             'domicile' => $request->domicile,
             'etablissement_origine' => $request->etablissement_origine,
             'adresse_geographique' => $request->adresse_geographique,
@@ -424,26 +432,30 @@ class PersonnelDefaultController extends Controller
             'responsable_legal_adresse' => $request->responsable_legal_adresse,
             'responsable_legal_domicile' => $request->responsable_legal_domicile,
             'responsable_legal_numero' => $request->responsable_legal_numero,
-            'classe_id' => $request->classe,
+            // 'classe_id' => $request->classe,
         ]);
+
+        $classe = Classe::findOrFail($request->classe);
+
         if ($request->statut == 'affecté') {
-            $scolarite = $etudiant->classe->niveauFaculte->scolarite_affecte;
+            $scolarite = $classe->niveauFaculte->scolarite_affecte;
         } else if ($request->statut == 'non affecté') {
-            $scolarite = $etudiant->classe->niveauFaculte->scolarite_nonaffecte;
+            $scolarite = $classe->niveauFaculte->scolarite_nonaffecte;
         }
         else {
-            $scolarite = $etudiant->classe->niveauFaculte->scolarite_reaffecte;    
+            $scolarite = $classe->niveauFaculte->scolarite_reaffecte;    
         }
 
         $inscription->update([
             'frais_inscription' => $scolarite,
             'net_payer' => $scolarite,
-            'fiche_inscription' => $fiche_inscription_path ?? null,
-            'fiche_oriantation' => $fiche_oriantation_path ?? null,
-            'extrait_naissance' => $extrait_path ?? null,
-            'bac_legalise' => $bac_legalise_path ?? null,
-            'cp_note_bac' => $cp_note_bac_path ?? null,
-            'photo' => $photo_path ?? null,
+            'fiche_inscription' => !is_null($request->fiche_inscription) ? $fiche_inscription_path : $inscription->fiche_inscription,
+            'fiche_oriantation' => !is_null($request->fiche_oriantation) ? $fiche_oriantation_path : $inscription->fiche_oriantation,
+            'extrait_naissance' =>!is_null($request->extrait_naissance) ? $extrait_path : $inscription->extrait_naissance,
+            'bac_legalise' => !is_null($request->bac_legalise) ? $bac_legalise_path : $inscription->bac_legalise,
+            'cp_note_bac' => !is_null($request->cp_note_bac) ? $cp_note_bac_path : $inscription->cp_note_bac,
+            'photo' => !is_null($request->photo) ? $photo_path : $inscription->photo,
+            'classe_id' => $request->classe,
         ]);
 
         flashy()->message('Informations enregistrées avec succès');

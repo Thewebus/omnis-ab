@@ -202,7 +202,7 @@ Route::group(['prefix' => 'informaticien/inscription', 'middleware' => ['auth:ad
     Route::get('/inscriptions-validees', [InformatiqueController::class, 'inscriptionValideeListeEtudiant'])->name('admin.inscription-validee-liste-etudiant');
     Route::get('/etudiant/{etudiant_id}', [InformatiqueController::class, 'inscriptionDetails'])->name('admin.inscritpion-detail');
     Route::get('/fiche/{inscription_id}', [InformatiqueController::class, 'ficheInscriptionPdf'])->name('admin.inscritpion-fiche-pdf');
-    Route::get('/modification/{etudiant_id}', [InformatiqueController::class, 'modifInscriptionForm'])->name('admin.inscritpion-modif-form');
+    Route::get('/modification/{inscription_id}', [InformatiqueController::class, 'modifInscriptionForm'])->name('admin.inscritpion-modif-form');
     Route::post('/modification/{etudiant_id}', [InformatiqueController::class, 'modifInscriptionFormPost'])->name('admin.inscritpion-modif-form-post');
 });
 

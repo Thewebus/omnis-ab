@@ -50,8 +50,8 @@
 	                                <tr>
                                         <td>{{ $loop->iteration }}</td>
 	                                    <td>{{ $etudiant->fullname }}</td>
-	                                    <td>{{ $etudiant->classe->nom ?? 'NONE'}}</td>
-	                                    <td>{{ $etudiant->niveauFaculte->faculte->nom  ?? $etudiant->classe->niveauFaculte->faculte->nom}}</td>
+	                                    <td>{{ $etudiant->classe($anneeAcademique->id)->nom ?? 'NONE'}}</td>
+	                                    <td>{{ $etudiant->classe($anneeAcademique->id)->niveauFaculte->faculte->nom ?? "NONE"}}</td>
                                         <td><a href="{{ route('admin.scolarite-inscritpion-detail', $etudiant->inscriptions->last()->id) }}" class="btn btn-success"><i class="fa fa-eye"></i></a></td>
                                     </tr>
                                     @endforeach

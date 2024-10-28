@@ -46,7 +46,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                Date Nais. : <b>{{ $inscription->etudiant->date_naissance }}</b> 
+                                Date Nais. : <b>{{ $inscription->etudiant->date_naissance->format('d/m/Y') }}</b> 
                             </div>
                             <div class="col-md-4">
                                 Lieu Nais. : <b>{{ $inscription->etudiant->lieu_naissance }}</b> 
@@ -92,9 +92,23 @@
                             </div>
                             <div class="col-md-3">
                                 Faculté : <b>
-                                    {{ ($inscription->etudiant->niveauFaculte->faculte->nom ?? $inscription->etudiant->classe->niveauFaculte->faculte->nom)
+                                    {{ $inscription->classe->niveauFaculte->faculte->nom
                                         ?? __('NEANT') }}
                                 </b> 
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                ID Permanent : <b>{{ strtoupper($inscription->etudiant->id_permanent) ?? __('NEANT') }}</b> 
+                            </div>
+                            <div class="col-md-3">
+                                N° Table BAC : <b>{{ strtoupper($inscription->etudiant->numero_table_bac) ?? __('NEANT') }}</b> 
+                            </div>
+                            <div class="col-md-3">
+                                Code EP : <b>{{ strtoupper($inscription->etudiant->code_ep) ?? __('NEANT') }}</b> 
+                            </div>
+                            <div class="col-md-3">
+                                Emargement : <b>{{ $inscription->etudiant->emargement ?? __('NEANT') }}</b> 
                             </div>
                         </div>
                         <div class="row">
@@ -109,7 +123,7 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4">
-                                Niveau d'étude : <b>{{ ($inscription->etudiant->niveauFaculte->nom ?? $inscription->etudiant->classe->niveauFaculte->nom) ?? __('NEANT') }}</b> 
+                                Niveau d'étude : <b>{{ $inscription->classe->niveauFaculte->nom ?? __('NEANT') }}</b> 
                             </div>
                         </div>
                         <div class="row mb-3">

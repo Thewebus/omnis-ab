@@ -141,10 +141,10 @@
                                     @error('serie_bac')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                </div> 
+                                </div>  
                                 <div class="col-md-3">
                                     <label class="form-label" for="autre_diplome">Autre diplôme <span style="color: red">*</span></label>
-                                    <input class="form-control @error('autre_diplome') is-invalid @enderror" id="autre_diplome" value="{{ old('autre_diplome') ?? $etudiant->autre_diplome }}" name="autre_diplome" type="text" placeholder="Série BAC" />
+                                    <input class="form-control @error('autre_diplome') is-invalid @enderror" id="autre_diplome" value="{{ old('autre_diplome') ?? $etudiant->autre_diplome }}" name="autre_diplome" type="text" placeholder="Autre diplôme" />
                                     @error('autre_diplome')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -178,17 +178,17 @@
                                     <select class="form-select digits @error('niveau_etude_2') is-invalid @enderror" id="niveau_etude_2" name="niveau_etude_2" >
                                         <option selected value="">Choisir un niveau</option>
                                         <optgroup label="BTS">
-                                            <option value="bts 1" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'bts 1' ? 'selected' : '' }}>BTS 1</option>
-                                            <option value="bts 2" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'bts 2' ? 'selected' : '' }}>BTS 2</option>
+                                            <option value="bts 1" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'bts 1' ? 'selected' : '' }}>BTS 1</option>
+                                            <option value="bts 2" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'bts 2' ? 'selected' : '' }}>BTS 2</option>
                                         </optgroup>
                                         <optgroup label="LICENCE">
-                                            <option value="licence 1" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'licence 1' ? 'selected' : '' }}>LICENCE 1</option>
-                                            <option value="licence 2" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'licence 2' ? 'selected' : '' }}>LICENCE 2</option>
-                                            <option value="licence 3" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'licence 3' ? 'selected' : '' }}>LICENCE 3</option>
+                                            <option value="licence 1" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'licence 1' ? 'selected' : '' }}>LICENCE 1</option>
+                                            <option value="licence 2" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'licence 2' ? 'selected' : '' }}>LICENCE 2</option>
+                                            <option value="licence 3" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'licence 3' ? 'selected' : '' }}>LICENCE 3</option>
                                         </optgroup>
                                         <optgroup label="MASTER">
-                                            <option value="master 1" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'master 1' ? 'selected' : '' }}>MASTER 1</option>
-                                            <option value="master 2" {{ (old('niveau_etude_2') ?? $etudiant->classe->niveauFaculte->nom) == 'master 2' ? 'selected' : '' }}>MASTER 2</option>
+                                            <option value="master 1" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'master 1' ? 'selected' : '' }}>MASTER 1</option>
+                                            <option value="master 2" {{ (old('niveau_etude_2') ?? $inscription->classe->niveauFaculte->nom) == 'master 2' ? 'selected' : '' }}>MASTER 2</option>
                                         </optgroup>
                                     </select>
                                     @error('niveau_etude_2')
@@ -207,7 +207,7 @@
                                     <select class="js-example-basic-single col-sm-12 @error('faculte') is-invalid @enderror" id="faculte" name="faculte">
                                         <option value="">Choisir la faculte</option>
                                         @foreach ($facultes as $faculte)
-                                            <option {{ (old("faculte") ?? $etudiant->classe->niveauFaculte->faculte->id) == $faculte->id ? 'selected' : '' }} value="{{ $faculte->id }}">{{ $faculte->nom }}</option>
+                                            <option {{ (old("faculte") ?? $inscription->classe->niveauFaculte->faculte->id) == $faculte->id ? 'selected' : '' }} value="{{ $faculte->id }}">{{ $faculte->nom }}</option>
                                         @endforeach
                                     </select>
                                     @error('faculte')
@@ -222,27 +222,59 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="row mb-3 g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label" for="classe">Classe <span style="color: red">*</span></label>
                                     <select class="js-example-basic-single col-sm-12 @error('classe') is-invalid @enderror" id="classe" name="classe">
                                         <option value="">Choisir la classe</option>
                                         @foreach ($classes as $classe)
-                                            <option {{ (old("classe") ?? $etudiant->classe_id) == $classe->id ? 'selected' : '' }} value="{{ $classe->id }}">{{ $classe->nom }} | {{ $classe->code }}</option>
+                                            <option {{ (old("classe") ?? $inscription->classe_id) == $classe->id ? 'selected' : '' }} value="{{ $classe->id }}">{{ $classe->nom }} | {{ $classe->code }}</option>
                                         @endforeach
                                     </select>
                                     @error('classe')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label" for="matricule">Matricule</label>
                                     <input class="form-control @error('matricule') is-invalid @enderror" id="matricule" value="{{ old('matricule') ?? $etudiant->matricule_etudiant }}" name="matricule" type="text" placeholder="Matricule" />
                                     @error('matricule')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="id_permanent">ID Permanent</label>
+                                    <input class="form-control @error('id_permanent') is-invalid @enderror" id="id_permanent" value="{{ old('id_permanent') ?? $etudiant->id_permanent }}" name="id_permanent" type="text" placeholder="ID Permanent" />
+                                    @error('id_permanent')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
+                            <div class="row mb-3 g-3">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="numero_table_bac">N° Table BAC</label>
+                                    <input class="form-control @error('numero_table_bac') is-invalid @enderror" id="numero_table_bac" value="{{ old('numero_table_bac') ?? $etudiant->numero_table_bac }}" name="numero_table_bac" type="text" placeholder="Numéro table BAC" />
+                                    @error('numero_table_bac')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="code_ep">Code EP</label>
+                                    <input class="form-control @error('code_ep') is-invalid @enderror" id="code_ep" value="{{ old('code_ep') ?? $etudiant->code_ep }}" name="code_ep" type="text" placeholder="Code EP" />
+                                    @error('code_ep')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="emargement">Emargement</label>
+                                    <input class="form-control @error('emargement') is-invalid @enderror" id="emargement" value="{{ old('emargement') ?? $etudiant->emargement }}" name="emargement" type="text" placeholder="Emargement" />
+                                    @error('emargement')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-12 mb-3">
                                     <h5 style="color: #24695c">RESPONSABLE LEGAL DE L’ETUDIANT (A APPELER EN CAS D’URGENCE)</h5>
