@@ -49,12 +49,14 @@
 											<form action="{{ route('admin.scolarite-pv', $classe->id) }}" method="post" style="display: inline-block">
 												@csrf
 												<input type="hidden" name="semestre" value="1">
+												<input type="hidden" name="session" value="{{ $session }}">
 												<button type="submit" class="btn btn-secondary">Semestre 1</button>
 											</form>
 
 											<form action="{{ route('admin.scolarite-pv', $classe->id) }}" method="post" style="display: inline-block">
 												@csrf
 												<input type="hidden" name="semestre" value="2">
+												<input type="hidden" name="session" value="{{ $session }}">
 												<button type="submit" class="btn btn-primary">Semestre 2</button>
 											</form>
 										</td>

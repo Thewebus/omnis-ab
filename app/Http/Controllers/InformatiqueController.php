@@ -510,7 +510,7 @@ class InformatiqueController extends Controller
         $etudiants = User::whereHas('inscriptions', function(Builder $query) use($anneeAcademique) {
             $query->where('annee_academique_id', $anneeAcademique->id)->where('valide', 1);
         })->orderBy('fullname', 'ASC')->get();
-
+        // dd($etudiants);
         // dd($etudiants[0]->inscriptions->where('annee_academique_id', $anneeAcademique->id)->first()->classe);
         $classes = Classe::orderBy('nom', 'ASC')->get();
         return view('informatique.affectation.affectation-etudiant', compact('etudiants', 'classes', 'anneeAcademique'));

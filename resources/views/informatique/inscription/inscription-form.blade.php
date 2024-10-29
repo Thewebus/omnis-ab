@@ -205,7 +205,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="form-label" for="date_premiere_entree">Date de la 1er rentrée à l'université (année)</label>
+                                    <label class="form-label" for="date_premiere_entree">Date de la 1er rentrée à l'université (année) <span style="color: red">*</span></label>
                                     <input class="form-control @error('date_premiere_entree') is-invalid @enderror" id="date_premiere_entree" value="{{ old('date_premiere_entree') }}" name="date_premiere_entree" type="number" placeholder="Date de la 1er rentrée à l'université" />
                                     @error('date_premiere_entree')
                                         <div class="invalid-feedback">{{ $message }}</div>

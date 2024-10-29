@@ -595,24 +595,28 @@ class PersonnelDefaultController extends Controller
         return redirect()->route('admin.scolarite-notes-matiere', $matiere->id);
     }
 
-    public function listeClassesPV() {
+    public function listeClassesPV($session) {
         $classes = Classe::orderBy('nom', 'ASC')->get();
-        return view('personnels.pv.liste-classe-pv', compact('classes'));
+        return view('personnels.pv.liste-classe-pv', compact('classes', 'session'));
     }
 
     public function pv(Request $request,$id) {
         $this->validate($request, [
-            'semestre' => 'required|in:1,2'
+            'semestre' => 'required|in:1,2',
+            'session' => 'required|in:1,2',
         ]);
         $classe = Classe::findOrFail($id);
         $semestre = $request->semestre;
-        $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
+        $session = $request->session;
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
 
-        $pvClasse = (new BulletinService())->pv($id, $request->semestre, 1);
+        $pvClasse = $anneeAcademique->id == 1 ? (new BulletinService())->pvOld($id, $request->semestre, $request->session) : (new BulletinService())->pv($id, $request->semestre, $request->session);
+
         $entetes = $pvClasse[0];
-        $entete4 = $pvClasse[1];
-        $dataAllEtudiants = $pvClasse[2];
-        return view('personnels.pv.pv', compact('entetes', 'entete4', 'dataAllEtudiants', 'classe', 'semestre', 'anneeAcademique'));
+        $dataAllEtudiants = $pvClasse[1];
+        $entete4 = $anneeAcademique->id == 1 ? $pvClasse[2] : '';
+
+        return view('personnels.pv.pv', compact('entetes', 'entete4', 'dataAllEtudiants', 'classe', 'semestre', 'anneeAcademique', 'session'));
     }
 
     public function listClasseEtudiants($id) {

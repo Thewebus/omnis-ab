@@ -128,11 +128,13 @@
 			</thead>
 			<tbody>
 				@foreach ($classe->etudiants() as $etudiant)
-					<tr>
-						<td>{{ $loop->iteration }}</td>
-						<td>{{ $etudiant->fullname }}</td>
-						<td class="align-center">{{ $etudiant->matricule_etudiant }}</td>
-					</tr>
+					@if ($etudiant)
+						<tr>
+							<td>{{ $loop->iteration }}</td>
+							<td>{{ $etudiant->fullname }}</td>
+							<td class="align-center">{{ $etudiant->matricule_etudiant }}</td>
+						</tr>
+					@endif
 				@endforeach
 			</tbody>
 		</table>

@@ -30,43 +30,123 @@
                                 <h5></h5>
                             </div>
                             <div class="col-sm-5">
-                                <h6>{{ $classe->nom }} // Semestre {{ $semestre }} // {{ $anneeAcademique->debut }} - {{ $anneeAcademique->fin }}</h6>
+                                <h6>{{ $classe->nom }} // Semestre {{ $semestre }} // Session {{ $session }} //{{ $anneeAcademique->debut }} - {{ $anneeAcademique->fin }}</h6>
                             </div>
                         </div>
 					</div>
+                    @php
+                        if (env('OWNER') == 'ua_abidjan') {
+                            $ua = 'ABIDJAN';
+                        }
+                        else if (env('OWNER') == 'ua_bouake') {
+                            $ua = 'BOUAKE';
+                        }
+                        else if (env('OWNER') == 'ua_bassam') {
+                            $ua = 'GRAND BASSAM';
+                        }
+                        else {
+                            $ua = 'SAN-PEDRO';
+                        }
+                    @endphp
                     <div class="card-block row">
                         <div class="col-sm-12 col-lg-12 col-xl-12">
                             <div class="table-responsive">
-                                <table class="table table-bordered text-center align-middle">
-                                    <tr>
-                                        @foreach ($entetes[0] as $entete)
-                                            <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        @foreach ($entetes[1] as $entete)
-                                            <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        @foreach ($entetes[2] as $entete)
-                                            <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
-                                        @endforeach
-                                        {{-- <th rowspan="2">TOTAL CREDIT VALIDE  30/30</th> --}}
-                                    </tr>
-                                    <tr>
-                                        @foreach ($entete4 as $entete)
-                                            <td>{{ $entete }}</td>
-                                        @endforeach
-                                    </tr>
-                                    @foreach ($dataAllEtudiants as $dataAllEtudiant)
+                                @if ($anneeAcademique->id == 1)
+                                    <table class="table table-bordered text-center align-middle">
                                         <tr>
-                                            @foreach ($dataAllEtudiant as $item)
-                                                <td>{{ $item }}</td>
+                                            @foreach ($entetes[0] as $entete)
+                                                <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
                                             @endforeach
                                         </tr>
-                                    @endforeach
-                                </table>
+                                        <tr>
+                                            @foreach ($entetes[1] as $entete)
+                                                <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entetes[2] as $entete)
+                                                <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entete4 as $entete)
+                                                <td>{{ $entete }}</td>
+                                            @endforeach
+                                        </tr>
+                                        @foreach ($dataAllEtudiants as $dataAllEtudiant)
+                                            <tr>
+                                                @foreach ($dataAllEtudiant as $item)
+                                                    <td style="{{ $item === '-' ? "background-color: rgb(240, 239, 239)" : '' }}" class="black-background">{{ $item }}</td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                @else
+                                    <table class="table table-bordered text-center align-middle">
+                                        <tr>
+                                            @foreach ($entetes[0] as $entete)
+                                                <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">
+                                                    UNIVERSITE DE L'ATLANTIQUE {{ $ua }} - ANNEE ACADEMIQUE: {{ $anneeAcademique->debut }} - {{ $anneeAcademique->fin }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entetes[0] as $entete)
+                                                <td rowspan="{{ $entete['rowspan'] }}" colspan="{{ $entete['colspan'] }}">{{ $entete['nom'] }}</td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entetes[1] as $entete)
+                                                <td
+                                                    @if($loop->index > 0 && $loop->index < array_key_last($entetes[1]))
+                                                        style="background-color: rgb(192, 182, 182)" 
+                                                    @endif 
+                                                    rowspan="{{ $entete['rowspan'] }}" 
+                                                    colspan="{{ $entete['colspan'] }}"
+                                                >
+                                                    {{ $entete['nom'] }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entetes[2] as $entete)
+                                                <td 
+                                                    @if ($entete['nom'] == 'MOY.UE' || $entete['nom'] == 'RES.UE' || $entete['nom'] == 'CREDIT(S)')
+                                                        style="background-color: rgb(192, 182, 182)" 
+                                                    @endif
+                                                    rowspan="{{ $entete['rowspan'] }}"
+                                                    colspan="{{ $entete['colspan'] }}"
+                                                >
+                                                    {{ $entete['nom'] }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        <tr>
+                                            @foreach ($entetes[3] as $entete)
+                                                <td
+                                                    @if ($entete == 'MOY.ECUE' || $loop->index == array_key_last($entetes[3]))
+                                                        style="background-color: rgb(192, 182, 182)" 
+                                                    @endif
+                                                >
+                                                    {{ $entete }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                        @foreach ($dataAllEtudiants as $dataAllEtudiant)
+                                            <tr>
+                                                @foreach ($dataAllEtudiant as $item)
+                                                    <td
+                                                        @if ($item == 'V' || $item == 'R' || $loop->index == (array_key_last($dataAllEtudiant) - 1))
+                                                            style="background-color: rgb(192, 182, 182)" 
+                                                        @endif
+                                                    >
+                                                        {{ $item }}
+                                                    </td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                @endif
                             </div>
                         </div>
                     </div>

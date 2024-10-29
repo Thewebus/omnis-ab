@@ -161,6 +161,12 @@ class ProfesseurDefaultController extends Controller
         return view('professeur.classe-presence', compact('matiereProfesseurs'));
     }
 
+    public function ListeClasse($id) {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        $classe = Classe::findOrFail($id);
+        return view('professeur.liste-classe-etudiant', compact('classe', 'anneeAcademique'));
+    }
+
     public function classeDetailsPresenceConsultation($id) {
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $classe = Classe::findOrFail($id);

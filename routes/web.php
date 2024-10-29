@@ -336,6 +336,7 @@ Route::group(['prefix' => 'professeur'], function() {
 Route::group(['prefix' => 'professeur/', 'middleware' => ['auth:profs', 'professeur']], function() {
     Route::get('/', [ProfesseurDefaultController::class, 'profDashboard'])->name('prof.dashboard');
     Route::get('/classe-liste-presence/{classe_id}', [ProfesseurDefaultController::class, 'classeDetailsPresence'])->name('prof.classe-details-presence');
+    Route::get('/classe-liste/{classe_id}', [ProfesseurDefaultController::class, 'ListeClasse'])->name('prof.classe-liste');
     Route::get('/liste-presence/{matiere_id}', [ProfesseurDefaultController::class, 'listePresence'])->name('prof.liste-presence');
     Route::get('/classe-liste-presence-consultation/{matiere_id}', [ProfesseurDefaultController::class, 'classeDetailsPresenceConsultation'])->name('prof.classe-details-presence-consultation');
     Route::post('/post-liste-presence/{matiere_id}', [ProfesseurDefaultController::class, 'postListePresence'])->name('prof.poste-liste-presence');

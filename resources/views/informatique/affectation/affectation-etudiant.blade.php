@@ -1,4 +1,4 @@
-@extends('layouts.informatique.master')
+	@extends('layouts.informatique.master')
 
 @section('title')Affectations etudiant
     {{ $title }}

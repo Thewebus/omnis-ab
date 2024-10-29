@@ -42,6 +42,14 @@
                             </div>
                         </li>
                         <li class="dropdown">
+                            <a class="nav-link menu-title {{ prefixActive('/personnel/liste-presence') }}" href="javascript:void(0)"><i data-feather="file-text"></i><span>Liste de classe</span></a>
+                            <ul class="nav-submenu menu-content"  style="display: {{ prefixBlock('/personnel/liste-presence') }};">
+                                @foreach (Auth::user()->classes as $classe)
+                                <li><a href="{{ route('prof.classe-liste', $classe->id) }}" class="{{routeActive('prof.classe-liste', $classe->id)}}">{{ $classe->nom }}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/personnel/liste-presence') }}" href="javascript:void(0)"><i data-feather="file-text"></i><span>Liste Présence</span></a>
                             <ul class="nav-submenu menu-content"  style="display: {{ prefixBlock('/personnel/liste-presence') }};">
                                 @foreach (Auth::user()->classes as $classe)
