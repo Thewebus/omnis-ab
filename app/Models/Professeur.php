@@ -46,7 +46,8 @@ class Professeur extends Authenticatable
     }
 
     public function classes() {
-        return $this->belongsToMany(Classe::class)->wherePivot('annee_academique_id', static::getLastAnneeAcademique());
+        return $this->belongsToMany(Classe::class)
+            ->wherePivot('annee_academique_id', static::getLastAnneeAcademique());
     }
 
     public function instituts() {
@@ -54,7 +55,9 @@ class Professeur extends Authenticatable
     }
 
     public function matieres() {
-        return $this->belongsToMany(Matiere::class)->withPivot('volume_horaire', 'progression', 'statut', 'classe_id', 'annee_academique_id')->withTimestamps();
+        return $this->belongsToMany(Matiere::class)->withPivot('volume_horaire', 'progression', 'statut', 'classe_id', 'annee_academique_id')
+            ->withTimestamps()
+            ->wherePivot('annee_academique_id', static::getLastAnneeAcademique());
     }
 
     public function presences() {
