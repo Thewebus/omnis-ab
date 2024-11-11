@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach ($etudiants as $etudiant)
+                        @foreach ($matiere->classe->etudiants() as $etudiant)
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <div class="row">

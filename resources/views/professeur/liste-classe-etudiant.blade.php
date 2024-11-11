@@ -30,7 +30,9 @@
 	                    <h5>Liste des étudiants classe <b>{{ $classe->nom }}</b></h5>
 	                    <div class="row">
 							<div class="col-md-9"></div>
-							<div class="col-md-3"><a href="{{ route('admin.liste-classe-pdf', $classe->id) }}" class="btn btn-primary"><i class="fa fa-download"></i> Liste de classe</a></div>
+							<div class="col-md-3">
+								{{-- <a href="{{ route('admin.liste-classe-pdf', $classe->id) }}" class="btn btn-primary"><i class="fa fa-download"></i> Liste de classe</a> --}}
+							</div>
 						</div>
 	                </div>
 	                <div class="card-body">

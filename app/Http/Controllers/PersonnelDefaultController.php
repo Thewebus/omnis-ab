@@ -479,7 +479,8 @@ class PersonnelDefaultController extends Controller
         $classe = $dataBrute[0];
         $matiere = $dataBrute[1];
         $dataNotes = $dataBrute[2];
-        return view('personnels.note.note', compact('classe', 'matiere', 'dataNotes'));
+        $notesSelectionnees = $dataBrute[3];
+        return view('personnels.note.note', compact('classe', 'matiere', 'dataNotes', 'notesSelectionnees'));
     }
 
     public function addNote($id) {

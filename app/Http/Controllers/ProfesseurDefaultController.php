@@ -156,6 +156,7 @@ class ProfesseurDefaultController extends Controller
     public function classeDetailsPresence($id) {
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $classe = Classe::findOrFail($id);
+        // dd(Auth::user()->classes);
         $matiereProfesseurs = MatiereProfesseur::with('matiere')->where('annee_academique_id', $anneeAcademique->id)
             ->where('professeur_id', Auth::id())->where('classe_id', $classe->id)->get();
         return view('professeur.classe-presence', compact('matiereProfesseurs'));
@@ -178,6 +179,7 @@ class ProfesseurDefaultController extends Controller
     public function listePresence($id) {
         $matiere = Matiere::findOrFail($id);
         $etudiants = User::where('classe_id', $matiere->classe->id)->get();
+        // dd($matiere->classe->etudiants());
         return view('professeur.liste-presence', compact('matiere', 'etudiants'));
     }
 

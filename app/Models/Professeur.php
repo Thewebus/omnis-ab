@@ -40,8 +40,13 @@ class Professeur extends Authenticatable
         'modules_enseignes' => 'array',
     ];
 
+    public static function getLastAnneeAcademique() {
+        $anneeAcademique = AnneeAcademique::orderBy('id', 'desc')->first();
+        return $anneeAcademique->id;
+    }
+
     public function classes() {
-        return $this->belongsToMany(Classe::class);
+        return $this->belongsToMany(Classe::class)->wherePivot('annee_academique_id', static::getLastAnneeAcademique());
     }
 
     public function instituts() {

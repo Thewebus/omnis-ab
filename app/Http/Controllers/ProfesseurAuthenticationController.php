@@ -18,10 +18,11 @@ class ProfesseurAuthenticationController extends Controller
         ]);
 
         if(Auth::guard('profs')->attempt($request->only(['email', 'password']))) {
+            // dd($request->only(['email', 'password']));
             $request->session()->regenerate();
             return redirect()->intended('professeur');
         }
-
+        
         // if (Auth::attempt($credentials)) {
         //     $request->session()->regenerate();
 
