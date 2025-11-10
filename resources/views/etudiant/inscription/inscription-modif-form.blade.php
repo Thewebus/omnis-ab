@@ -178,17 +178,17 @@
                                     <select class="form-select digits @error('niveau_etude_2') is-invalid @enderror" id="niveau_etude_2" name="niveau_etude_2" >
                                         <option selected value="">Choisir un niveau</option>
                                         <optgroup label="BTS">
-                                            <option value="bts 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'bts 1' ? 'selected' : '' }}>BTS 1</option>
-                                            <option value="bts 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'bts 2' ? 'selected' : '' }}>BTS 2</option>
+                                            <option value="bts 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'bts 1' ? 'selected' : '' }}>BTS 1</option>
+                                            <option value="bts 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'bts 2' ? 'selected' : '' }}>BTS 2</option>
                                         </optgroup>
                                         <optgroup label="LICENCE">
-                                            <option value="licence 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'licence 1' ? 'selected' : '' }}>LICENCE 1</option>
-                                            <option value="licence 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'licence 2' ? 'selected' : '' }}>LICENCE 2</option>
-                                            <option value="licence 3" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'licence 3' ? 'selected' : '' }}>LICENCE 3</option>
+                                            <option value="licence 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'licence 1' ? 'selected' : '' }}>LICENCE 1</option>
+                                            <option value="licence 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'licence 2' ? 'selected' : '' }}>LICENCE 2</option>
+                                            <option value="licence 3" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'licence 3' ? 'selected' : '' }}>LICENCE 3</option>
                                         </optgroup>
                                         <optgroup label="MASTER">
-                                            <option value="master 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'master 1' ? 'selected' : '' }}>MASTER 1</option>
-                                            <option value="master 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe->niveauFaculte->nom) == 'master 2' ? 'selected' : '' }}>MASTER 2</option>
+                                            <option value="master 1" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'master 1' ? 'selected' : '' }}>MASTER 1</option>
+                                            <option value="master 2" {{ (old('niveau_etude_2') ?? Auth::user()->classe($anneeAcademique->id)?->niveauFaculte->nom) == 'master 2' ? 'selected' : '' }}>MASTER 2</option>
                                         </optgroup>
                                     </select>
                                     @error('niveau_etude_2')

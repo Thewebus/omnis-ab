@@ -104,7 +104,7 @@
 																			<label class="col-sm-3 col-form-label">Matière</label>
 																			<div class="col-sm-9">
 																				<select class="form-select" id="validationCustom04" name="matiere">
-																					@foreach ($classe->niveauFiliere->matieres as $matiere)
+																					@foreach ($classe->niveauFaculte->matieres as $matiere)
 																						<option value="{{ $matiere->id }}" {{ ($cours->matiere_id ?? old('matiere')) == $matiere->id ? 'selected' : '' }}>{{ $matiere->nom }}</option>
 																					@endforeach
 																				</select>                                              

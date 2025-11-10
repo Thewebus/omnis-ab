@@ -28,6 +28,7 @@ class CoursTimeAvailabilityRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        // dd(request()->input('jour'), $value, request()->input('heure_fin'), request()->input('classe'), request()->input('salle'), $this->cours);
         return Cours::isTimeAvailable(request()->input('jour'), $value, request()->input('heure_fin'), request()->input('classe'), request()->input('salle'), $this->cours);
     }
 

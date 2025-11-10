@@ -71,7 +71,7 @@
                         <li>
                             <a class="nav-link menu-title link-nav {{routeActive('user.ressource-index')}}" href="{{ route('user.ressource-index') }}"><i data-feather="database"></i><span>Ressources</span></a>
                         </li>
-                        @if (Auth::user()->notes->first()->show_note)
+                        @if (Auth::user()->notes->first()?->show_note)
                             <li class="sidebar-main-title">
                                 <div>
                                     <h6>Notes</h6>

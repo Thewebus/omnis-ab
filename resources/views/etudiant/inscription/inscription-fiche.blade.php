@@ -46,7 +46,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                Date Nais. : <b>{{ $etudiant->date_naissance->format('d/m/Y') }}</b> 
+                                Date Nais. : <b>{{ $etudiant->date_naissance?->format('d/m/Y') }}</b> 
                             </div>
                             <div class="col-md-4">
                                 Lieu Nais. : <b>{{ $etudiant->lieu_naissance }}</b> 
@@ -98,7 +98,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <h5 style="color: #24695c">ANNEE ACADEMIQUE {{ $etudiant->inscription($anneeAcademique->id)->anneeAcademique->debut }} - {{ $etudiant->inscription($anneeAcademique->id)->anneeAcademique->fin }}</h5>
+                                {{-- <h5 style="color: #24695c">ANNEE ACADEMIQUE {{ $etudiant->inscription($anneeAcademique->id)?->anneeAcademique->debut }} - {{""}}</h5> --}}
+                                <h5 style="color: #24695c">ANNEE ACADEMIQUE {{ $etudiant->inscription($anneeAcademique->id)?->anneeAcademique->debut }} - {{ $etudiant->inscription($anneeAcademique->id)?->anneeAcademique->fin }}</h5>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -196,102 +197,51 @@
                         <div class="row mt-3">
                             <div class="col-md-2">
                                 <a class="btn btn-outline-primary" 
-                                    href="{{ $etudiant->inscriptions->last()->extrait_naissance == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->extrait_naissance)) }}"
+                                    href="{{ $etudiant->inscriptions->last()?->extrait_naissance == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->extrait_naissance)) }}"
                                 >
-                                    Ext. nais. {{ $etudiant->inscriptions->last()->extrait_naissance == null ? '(Aucun)' : '' }}
+                                    Ext. nais. {{ $etudiant->inscriptions->last()?->extrait_naissance == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                             <div class="col-md-2">
                                 <a 
-                                    href="{{ $etudiant->inscriptions->last()->bac_legalise == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->bac_legalise)) }}" class="btn btn-outline-secondary"
+                                    href="{{ $etudiant->inscriptions->last()?->bac_legalise == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->bac_legalise)) }}" class="btn btn-outline-secondary"
                                 >
-                                    BAC {{ $etudiant->inscriptions->last()->bac_legalise == null ? '(Aucun)' : '' }}
+                                    BAC {{ $etudiant->inscriptions->last()?->bac_legalise == null ? '(Aucun)' : '' }}
                                 </a>    
                             </div>
                             <div class="col-md-2">
                                 <a 
-                                    href="{{ $etudiant->inscriptions->last()->cp_note_bac == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->cp_note_bac)) }}" 
+                                    href="{{ $etudiant->inscriptions->last()?->cp_note_bac == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->cp_note_bac)) }}" 
                                     class="btn btn-outline-warning"
                                 >
-                                    Note BAC {{ $etudiant->inscriptions->last()->cp_note_bac == null ? '(Aucun)' : '' }}
+                                    Note BAC {{ $etudiant->inscriptions->last()?->cp_note_bac == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                             <div class="col-md-2">
                                 <a 
-                                    href="{{ $etudiant->inscriptions->last()->fiche_inscription == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->fiche_inscription)) }}" 
+                                    href="{{ $etudiant->inscriptions->last()?->fiche_inscription == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->fiche_inscription)) }}" 
                                     class="btn btn-outline-secondary"
                                 >
-                                    Fiche inscription {{ $etudiant->inscriptions->last()->fiche_inscription == null ? '(Aucun)' : '' }}
+                                    Fiche inscription {{ $etudiant->inscriptions->last()?->fiche_inscription == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                             <div class="col-md-2">
                                 <a 
-                                    href="{{ $etudiant->inscriptions->last()->fiche_oriantation == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->fiche_oriantation)) }}" 
+                                    href="{{ $etudiant->inscriptions->last()?->fiche_oriantation == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->fiche_oriantation)) }}" 
                                     class="btn btn-outline-secondary"
                                 >
-                                    Fiche orientation {{ $etudiant->inscriptions->last()->fiche_oriantation == null ? '(Aucun)' : '' }}
+                                    Fiche orientation {{ $etudiant->inscriptions->last()?->fiche_oriantation == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                             <div class="col-md-2">
                                 <a 
-                                    href="{{ $etudiant->inscriptions->last()->photo == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->photo)) }}" 
+                                    href="{{ $etudiant->inscriptions->last()?->photo == null ? '#' : asset(str_replace('public', 'storage', $etudiant->inscriptions->last()->photo)) }}" 
                                     class="btn btn-outline-secondary"
                                 >
-                                    Photo {{ $etudiant->inscriptions->last()->photo == null ? '(Aucun)' : '' }}
+                                    Photo {{ $etudiant->inscriptions->last()?->photo == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                         </div>
-                        @if ($etudiant->inscriptions->last()->valide == 0)
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <h5 style="color: #24695c">Actions</h5>
-                                </div>
-                            </div>
-                            <div class="text-center mb-3">
-                                <form action="{{ route('admin.valider-inscription', $etudiant->inscriptions->last()->id) }}" method="post" style="display: inline-block">
-                                    @csrf
-                                    <button class="btn btn-success" type="submit"><i class="fa fa-check"></i> Valider l'inscription</button>
-                                </form>
-                                                            
-                                <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#denieModal{{ $etudiant->inscriptions->last()->id }}"><i class="icon-close"></i> Réfuser le dossier</button>
-                                <div class="modal fade" id="denieModal{{ $etudiant->inscriptions->last()->id }}" tabindex="-1" role="dialog" aria-labelledby="denieModal{{ $etudiant->inscriptions->last()->id }}" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Motif refus</h5>
-                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <form class="form theme-form" action="{{ route('admin.refuser-inscription', $etudiant->inscriptions->last()->id) }}" method="POST">
-                                                <div class="modal-body">
-                                                    @csrf
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <div class="mb-3 row">
-                                                                    <label class="col-sm-3 col-form-label">Motif</label>
-                                                                    <div class="col-sm-9">
-                                                                        <textarea class="form-control @error('motif') is-invalid @enderror" name="motif" rows="5" cols="5" placeholder="Motif du réfus">{{ old('motif') }}</textarea>
-                                                                        @error('motif')
-                                                                            <span class="invalid-feedback" role="alert">
-                                                                                <strong>{{ $message }}</strong>
-                                                                            </span>
-                                                                        @enderror
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Fermer</button>
-                                                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Valider</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>

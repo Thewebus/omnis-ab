@@ -66,6 +66,7 @@ class Cours extends Model
     // }
 
     public static function isTimeAvailable($jour, $heureDebut, $heureFin, $classe, $salle, $cours) {
+        // dd('jour ' . $jour, 'heureDebut '. $heureDebut, 'heureFin '.$heureFin, 'classe '.$classe, 'salle '.$salle, $cours);
         $cours = self::where('jour', $jour)
             ->when($cours, function($query) use ($cours) {
                 $query->where('id', '!=', $cours);

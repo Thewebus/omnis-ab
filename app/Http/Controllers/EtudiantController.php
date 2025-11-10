@@ -287,7 +287,8 @@ class EtudiantController extends Controller
     }
 
     public function ModifFicheInscription() {
-        return view('etudiant.inscription.inscription-modif-form');
+        $anneeAcademique = $this->anneeAcademique;
+        return view('etudiant.inscription.inscription-modif-form', compact('anneeAcademique'));
     }
 
     // public function resultatTest() {

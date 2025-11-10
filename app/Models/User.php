@@ -41,7 +41,7 @@ class User extends Authenticatable
     ];
 
     public function classe(int $anneeAcademiqueId) {
-        return $this->inscriptions->firstWhere('annee_academique_id', $anneeAcademiqueId)->classe ?? 'No classe';
+        return $this->inscriptions->firstWhere('annee_academique_id', $anneeAcademiqueId)?->classe;
     }
 
     public function cursus() {

@@ -6,6 +6,7 @@ use App\Models\AnneeAcademique;
 use App\Models\Classe;
 use App\Models\Cours;
 use App\Models\MatiereProfesseur;
+use App\Models\NiveauFaculte;
 use App\Models\Salle;
 use App\Rules\CoursTimeAvailabilityRule;
 use App\Services\ScheduleService;
@@ -28,7 +29,7 @@ class CoursController extends Controller
         $jours = Cours::JOURS;
         $classe = Classe::findOrFail($id);
         $salles = Salle::orderBy('nom', 'ASC')->get();
-
+        // dd($classe->niveauFaculte->matieres);
         return view('informatique.schedule.index-cours', compact('classe', 'salles', 'jours'));
     }
 
@@ -52,6 +53,7 @@ class CoursController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validate($request, [
             'jour'    => ['required', 'integer', 'min:1', 'max:7'],
             'matiere' => ['required', 'integer'],
