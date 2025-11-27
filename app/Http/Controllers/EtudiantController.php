@@ -38,8 +38,8 @@ class EtudiantController extends Controller
     public $anneeAcademique;
 
     public function __construct() {
-        // $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
-        $this->anneeAcademique = AnneeAcademique::find(1);
+        $this->anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        // $this->anneeAcademique = AnneeAcademique::find(1);
     }
 
     public function dashboard() {
@@ -590,9 +590,13 @@ class EtudiantController extends Controller
     }
 
     public function listeMatiere() {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+
         $data = new OtherDataService;
-        $dataNotesSem1 = $data->noteEtudiant(Auth::id(), 1);
-        $dataNotesSem2 = $data->noteEtudiant(Auth::id(), 2);
+        $user = Auth::user();
+        $inscription = $user->inscription($anneeAcademique->id);
+        $dataNotesSem1 = $data->noteEtudiant($inscription->id, 1);
+        $dataNotesSem2 = $data->noteEtudiant($inscription->id, 2);
         return view('etudiant.liste-matieres', compact('dataNotesSem1', 'dataNotesSem2'));
     }
 

@@ -67,7 +67,7 @@ class Cours extends Model
 
     public static function isTimeAvailable($jour, $heureDebut, $heureFin, $classe, $salle, $cours) {
         // dd('jour ' . $jour, 'heureDebut '. $heureDebut, 'heureFin '.$heureFin, 'classe '.$classe, 'salle '.$salle, $cours);
-        $cours = self::where('jour', $jour)
+        $courses = self::where('jour', $jour)
             ->when($cours, function($query) use ($cours) {
                 $query->where('id', '!=', $cours);
             })
@@ -79,8 +79,13 @@ class Cours extends Model
                 ['heure_debut', '<', $heureFin],
                 ['heure_fin', '>', $heureDebut],
             ])
+            ->where('annee_academique_id', getSelectedAnneeAcademique() ? getSelectedAnneeAcademique()->id : getLastAnneeAcademique()->id)
+            // ->get()->toArray();
             ->count();
-
-        return !$cours;
+        // dd(
+        //     $courses,
+        //     'jour ' . $jour, 'heureDebut '. $heureDebut, 'heureFin '.$heureFin, 'classe '.$classe, 'salle '.$salle
+        // );
+        return !$courses;
     }
 }

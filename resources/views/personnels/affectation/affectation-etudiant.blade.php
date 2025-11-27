@@ -57,7 +57,7 @@
 								<div class="col-sm-9">
 									<select name="etudiants[]" class="js-example-basic-multiple col-sm-12 @error('etudiants[]') is-invalid @enderror" multiple="multiple">
 										@foreach ($etudiants as $etudiant)
-											@if (is_null($etudiant->classe))
+											@if (is_null($etudiant->inscriptions->where('annee_academique_id', $anneeAcademique->id)->first()->classe))
 												<option value="{{ $etudiant->id }}">{{ $etudiant->fullname }} | {{ $etudiant->classe->nom ?? 'Pas de classe' }}</option>
 											@endif
 										@endforeach

@@ -1,9 +1,12 @@
 <header class="main-nav">
+    @php
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+    @endphp
     <div class="sidebar-user text-center">
         <a class="setting-primary" href="javascript:void(0)"><i data-feather="settings"></i></a><img class="img-90 rounded-circle" src="{{asset('assets/images/dashboard/1.png')}}" alt="" />
         <div class="badge-bottom"><span class="badge badge-primary">Etudiant</span></div>
         <a href="{{ route('user.profile') }}"> <h6 class="mt-3 f-14 f-w-600">{{ Auth::user()->fullname }}</h6></a>
-        <p class="mb-0 font-roboto">{{ Auth::user()->classe(1)->nom ?? __('Non inscrit') }}</p>
+        <p class="mb-0 font-roboto">{{ Auth::user()->classe($anneeAcademique->id)->nom ?? __('Non inscrit') }}</p>
         {{-- <ul>
             <li>
                 <span><span class="counter">19.8</span>k</span>
@@ -35,7 +38,7 @@
                     <li>
                         <a class="nav-link menu-title link-nav {{routeActive('user.dashboard-etudiant')}}" href="{{ route('user.dashboard-etudiant') }}"><i data-feather="database"></i><span>Tableau de bord</span></a>
                     </li>
-                    @if (Auth::user()->classe(1))
+                    @if (Auth::user()->classe($anneeAcademique->id))
                         <li class="sidebar-main-title">
                             <div>
                                 <h6>Fiche d'Inscription</h6>
@@ -62,7 +65,7 @@
                     <li>
                         <a class="nav-link menu-title link-nav {{routeActive('user.inscription-old')}}" href="{{ route('user.inscription-old') }}"><i data-feather="database"></i><span>Inscription</span></a>
                     </li> --}}
-                    @if (!is_null(Auth::user()->classe(1)))
+                    @if (!is_null(Auth::user()->classe($anneeAcademique->id)))
                         <li class="sidebar-main-title">
                             <div>
                                 <h6>Ressources</h6>

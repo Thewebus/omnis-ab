@@ -1219,7 +1219,7 @@ class InformatiqueController extends Controller
     public function showNotes(Request $request) {
         $classe = Classe::findOrFail($request->classe_id);
 
-        foreach($classe->etudiants as $etudiant) {
+        foreach($classe->etudiants() as $etudiant) {
             if(in_array($etudiant->id, $request->checked)) {
 
                 foreach($etudiant->notes as $note) {

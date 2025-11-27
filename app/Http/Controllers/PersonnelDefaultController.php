@@ -626,13 +626,13 @@ class PersonnelDefaultController extends Controller
     }
 
     public function affectationEtudiant() {
-        $etudiants = User::whereHas('inscriptions', function(Builder $query) {
-            $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
+        $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
+        $etudiants = User::whereHas('inscriptions', function(Builder $query) use ($anneeAcademique) {
             $query->where('annee_academique_id', $anneeAcademique->id)->where('valide', 1);
         })->orderBy('fullname', 'ASC')->get();
 
         $classes = Classe::orderBy('nom', 'ASC')->get();
-        return view('personnels.affectation.affectation-etudiant', compact('etudiants', 'classes'));
+        return view('personnels.affectation.affectation-etudiant', compact('etudiants', 'classes', 'anneeAcademique'));
     }
 
     public function affectationListeProf() {
