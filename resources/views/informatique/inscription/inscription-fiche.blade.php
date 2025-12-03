@@ -212,21 +212,21 @@
                             </div>
                         </div> --}}
                         <div class="row mt-3">
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <a class="btn btn-outline-primary" 
                                     href="{{ $inscription->extrait_naissance == null ? '#' : asset(str_replace('public', 'storage', $inscription->extrait_naissance)) }}"
                                 >
                                     Ext. nais. {{ $inscription->extrait_naissance == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <a 
                                     href="{{ $inscription->bac_legalise == null ? '#' : asset(str_replace('public', 'storage', $inscription->bac_legalise)) }}" class="btn btn-outline-secondary"
                                 >
                                     BAC {{ $inscription->bac_legalise == null ? '(Aucun)' : '' }}
                                 </a>    
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <a 
                                     href="{{ $inscription->cp_note_bac == null ? '#' : asset(str_replace('public', 'storage', $inscription->cp_note_bac)) }}" 
                                     class="btn btn-outline-warning"
@@ -234,7 +234,9 @@
                                     Note BAC {{ $inscription->cp_note_bac == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
-                            <div class="col-md-2">
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
                                 <a 
                                     href="{{ $inscription->fiche_inscription == null ? '#' : asset(str_replace('public', 'storage', $inscription->fiche_inscription)) }}" 
                                     class="btn btn-outline-secondary"
@@ -242,7 +244,7 @@
                                     Fiche inscription {{ $inscription->fiche_inscription == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <a 
                                     href="{{ $inscription->fiche_oriantation == null ? '#' : asset(str_replace('public', 'storage', $inscription->fiche_oriantation)) }}" 
                                     class="btn btn-outline-secondary"
@@ -250,12 +252,20 @@
                                     Fiche orientation {{ $inscription->fiche_oriantation == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <a 
                                     href="{{ $inscription->photo == null ? '#' : asset(str_replace('public', 'storage', $inscription->photo)) }}" 
                                     class="btn btn-outline-secondary"
                                 >
                                     Photo {{ $inscription->photo == null ? '(Aucun)' : '' }}
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a 
+                                    href="{{ $inscription->etudiant->carte_cmu == null ? '#' : asset(str_replace('public', 'storage', $inscription->etudiant->carte_cmu)) }}" 
+                                    class="btn btn-outline-secondary"
+                                >
+                                    Carte CMU {{ $inscription->etudiant->carte_cmu == null ? '(Aucun)' : '' }}
                                 </a>
                             </div>
                         </div>

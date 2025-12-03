@@ -167,8 +167,6 @@ class InformatiqueController extends Controller
             // 'classe_id' => $request->classe,
         ]);
 
-        $etudiant->update(['identifiant_bulletin' => $etudiant->id + 10000]);
-
         $classe = Classe::findOrFail($request->classe);
 
         if ($request->statut == 'affecté') {
@@ -205,6 +203,15 @@ class InformatiqueController extends Controller
             $photo_name = str_replace(' ', '_', $request->nom_prenom_etudiant). '_' . time() . '_photo.' . $request->photo->extension();
             $photo_path = $request->photo->storeAs('public/etudiants/photo', $photo_name);
         }
+        if (!is_null($request->carte_cmu)) {
+            $carte_cmu_name = str_replace(' ', '_', $request->nom_prenom_etudiant). '_' . time() . '_carte_cmu.' . $request->carte_cmu->extension();
+            $carte_cmu_path = $request->carte_cmu->storeAs('public/etudiants/photo', $carte_cmu_name);
+        }
+
+        $etudiant->update([
+            'identifiant_bulletin' => $etudiant->id + 10000,
+            'carte_cmu' =>  $carte_cmu_path ?? null,
+        ]);
 
         Inscription::create([
             'frais_inscription' => $scolarite,

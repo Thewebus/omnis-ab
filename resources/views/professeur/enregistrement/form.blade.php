@@ -245,7 +245,8 @@
                                 </div>
                                 <div class="f1-buttons">
                                     <button class="btn btn-primary btn-previous" type="button">Précédant</button>
-                                    <button class="btn btn-primary btn-submit" {{ Auth::user()->valide == 1 ? 'disabled' : '' }} type="submit">Valider</button>
+                                    <button class="btn btn-primary btn-submit" type="submit">Valider</button>
+                                    {{-- <button class="btn btn-primary btn-submit" {{ Auth::user()->valide == 1 ? 'disabled' : '' }} type="submit">Valider</button> --}}
                                 </div>
                             </fieldset>
                         </form>

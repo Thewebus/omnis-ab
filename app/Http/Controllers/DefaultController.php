@@ -15,11 +15,14 @@ class DefaultController extends Controller
         return view('welcome');
     }
 
-    public function setAnneeAcademique($id) {
+    public function setAnneeAcademique(Request $request, $id) {
+        $previous = url()->previous();
+        $firstSegment = $request->create($previous)->segment(1);
         $anneeAcademique = AnneeAcademique::findOrFail($id);
         setSelectedAnneeAcademique($anneeAcademique);
 
-        return back();
+        return redirect("/{$firstSegment}");
+        // return back();
     }
 
 }

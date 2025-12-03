@@ -430,7 +430,15 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label @error('carte_cmu') is-invalid @enderror" for="carte_cmu">Carte CMU</label>
+                                    <input class="form-control" type="file" name="carte_cmu" aria-label="file example"/>
+                                    @error('carte_cmu')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                             <button class="btn btn-primary" type="submit">Valider</button>
                         </form>
                     </div>

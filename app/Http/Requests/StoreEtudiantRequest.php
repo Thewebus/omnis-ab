@@ -61,12 +61,13 @@ class StoreEtudiantRequest extends FormRequest
             // 'responsable_scolarite_adresse' => 'required|string',
             // 'responsable_scolarite_domicile' => 'required|string',
 
-            'fiche_inscription' => 'nullable|mimes:pdf|max:5120',
-            'fiche_oriantation' => 'nullable|mimes:pdf|max:5120',
-            'extrait_naissance' => 'nullable|mimes:pdf|max:5120',
-            'bac_legalise' => 'nullable|mimes:pdf|max:5120',
-            'cp_note_bac' => 'nullable|mimes:pdf|max:5120',
-            'photo' => 'nullable|mimes:png,jpg,jpeg|max:5120',
+            'fiche_inscription' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'fiche_oriantation' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'extrait_naissance' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'bac_legalise' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'cp_note_bac' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'photo' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
+            'carte_cmu' => 'nullable|mimes:pdf,png,jpg,jpeg|max:5120',
         ];
     }
 }

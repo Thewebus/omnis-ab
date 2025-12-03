@@ -77,11 +77,11 @@ class ProfesseurDefaultController extends Controller
             'anciennete' => 'required|integer',
             'numero_cnps' => 'nullable|string',
             'matieres' => 'nullable|array',
-            'piece_indentite' => 'nullable|mimes:pdf',
-            'cv' => 'nullable|mimes:pdf',
-            'diplomes' => 'nullable|mimes:pdf',
-            'autorisation_enseigner' => 'nullable|mimes:pdf',
-            'soumettre' => 'required|integer',          
+            'piece_indentite' => 'nullable|mimes:pdf,jpg,png,jpeg',
+            'cv' => 'nullable|mimes:pdf,jpg,png,jpeg',
+            'diplomes' => 'nullable|mimes:pdf,jpg,png,jpeg',
+            'autorisation_enseigner' => 'nullable|mimes:pdf,jpg,png,jpeg',
+            'soumettre' => 'required|integer',
         ]);
 
         if (!is_null($request->piece_indentite)) {
