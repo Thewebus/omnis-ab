@@ -102,7 +102,7 @@
         <h3>{{ $etudiant->classe($anneUniversitaire->id)->niveauFaculte->faculte->nom }}</h3> 
     </div>
     <div class="certif">
-        <h2>CERTIFICAT D'ADMISSION</h2>
+        <h2>CERTIFICAT {{ $docType == 'attestation_admission' ? 'D\'ADMISSION' : 'DE REUSSITE' }}</h2>
         <h4>A LA {{ $etudiant->classe($anneUniversitaire->id)->nom }}</h4>
     </div>
     <div class="text">

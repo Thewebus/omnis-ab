@@ -32,10 +32,10 @@
                             @endif
                         </span>
                         <div class="row mt-5">
-                            <div class="col-md-3"></div>
+                            <div class="col-md-3"><a href="{{ route('admin.certif-scolarite-pdf', $inscription->id) }}" target="_bank" class="btn btn-secondary"><i class="fa fa-file"></i> Certif. Scolarité</a></div>
                             <div class="col-md-3"><a href="{{ route('admin.liste-note-etudiant', $inscription->id) }}" target="_bank" class="btn btn-secondary"><i class="fa fa-file"></i> Fiche de notes</a></div>
                             <div class="col-md-3"><a href="{{ route('admin.inscritpion-fiche-pdf', $inscription->id) }}" target="_bank" class="btn btn-primary"><i class="fa fa-file"></i> Fiche d'inscription</a></div>
-                            <div class="col-md-3"> <a href="{{ route('admin.inscritpion-modif-form', $inscription->id) }}" class="btn btn-warning"><i class="fa fa-edit"></i> Modifié les informations</a></div>
+                            <div class="col-md-3"> <a href="{{ route('admin.inscritpion-modif-form', $inscription->id) }}" class="btn btn-warning"><i class="fa fa-edit"></i> Modif. infos</a></div>
                         </div>
                     </div>
                     <div class="card-body">

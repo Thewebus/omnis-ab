@@ -253,7 +253,13 @@
                         </div>
                     </li>
                     <li>
-                        <a class="nav-link menu-title link-nav {{routeActive('admin.attestation-admission')}}" href="{{ route('admin.attestation-admission') }}"><i data-feather="database"></i><span>Cert. admission</span></a>
+                        <a class="nav-link menu-title link-nav {{routeActive('admin.attestation-admission')}}" href="{{ route('admin.attestation-admission', ['docType' => 'attestation_admission']) }}"><i data-feather="file"></i><span>Cert. admission</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-link menu-title link-nav" href="{{ route('admin.attestation-admission', ['docType' => 'certificat_reussite']) }}"><i data-feather="file"></i><span>Cert. réussite Licence</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-link menu-title link-nav" href="{{ route('admin.certif-master') }}"><i data-feather="file"></i><span>Cert. réussite Master</span></a>
                     </li>
                     <li class="sidebar-main-title">
                         <div>

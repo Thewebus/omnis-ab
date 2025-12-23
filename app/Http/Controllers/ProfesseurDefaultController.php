@@ -224,7 +224,7 @@ class ProfesseurDefaultController extends Controller
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $matiere = Matiere::findOrFail($id);
         $presences = Presence::where('annee_academique_id', $anneeAcademique->id)->where('classe_id', $matiere->classe->id)->where('matiere_id', $matiere->id)->get();
-        $liste = $presences[0]->liste;
+        $liste = count($presences) ? $presences[0]->liste : [];
         // ksort($liste);
         // dd($liste);
         return view('professeur.consultation-liste-presence', compact('presences'));

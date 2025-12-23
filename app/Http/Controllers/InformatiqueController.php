@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use Carbon\Carbon;
 use App\Models\Note;
 use App\Models\User;
 use App\Models\Salle;
 use App\Models\Classe;
-use App\Models\Faculte;
 // use Barryvdh\DomPDF\PDF;
+use App\Models\Faculte;
 use App\Models\Matiere;
 use App\Exports\PVExport;
 use App\Models\Personnel;
@@ -342,6 +343,16 @@ class InformatiqueController extends Controller
         $ficheInscription =  PDF::loadView('informatique.inscription.inscription-fiche-pdf', compact('inscription' ,'etudiant', 'anneeAcademique'));
         return $ficheInscription->stream();
         // return view('informatique.inscription.inscription-fiche-pdf');
+    }
+
+    public function certifScolaritePdf($inscriptionId) {
+        $inscription = Inscription::findOrFail($inscriptionId);
+        $etudiant = $inscription->etudiant;
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        // dd($etudiant);
+        $certifScolarite =  PDF::loadView('informatique.inscription.certif-scolarite-pdf', compact('inscription' ,'etudiant', 'anneeAcademique'));
+        return $certifScolarite->stream();
+        // return view('informatique.inscription.certif-scolarite-pdf');
     }
 
     public function modifInscriptionFormPost(Request $request, $id) {
@@ -1188,8 +1199,12 @@ class InformatiqueController extends Controller
         return view('informatique.statistique.statistique');
     }
 
-    public function attestationAdmission() {
-        $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
+    public function attestationAdmission(Request $request) {
+        $request->validate([
+            'docType' => 'required|string|in:attestation_admission,certificat_reussite',
+        ]);
+        $docType = $request->docType;
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
         $anneeAcademiques = AnneeAcademique::orderBy('id', 'desc')->get();
         $sessions = ['JANVIER','FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN',
             'JUILLET', 'AOUT', 'SEPTEMPBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
@@ -1198,7 +1213,7 @@ class InformatiqueController extends Controller
             $query->where('valide', 1)->where('annee_academique_id', $anneeAcademique->id);
         })->get();
 
-        return view('informatique.documents.attestation-admission', compact('etudiants', 'anneeAcademiques', 'anneeAcademique', 'sessions', 'mentions'));
+        return view('informatique.documents.attestation-admission', compact('etudiants', 'anneeAcademiques', 'anneeAcademique', 'sessions', 'mentions', 'docType'));
     }
 
     public function attestationAdmissionPdf(Request $request) {
@@ -1209,6 +1224,7 @@ class InformatiqueController extends Controller
             'annee' => 'required|digits:4',
             'mention' => 'required|string',
             'president' => 'required|string',
+            'docType' => 'required|string|in:attestation_admission,certificat_reussite',
         ]);
 
         $anneUniversitaire = AnneeAcademique::findOrFail($request->annee_universitaire);
@@ -1217,10 +1233,59 @@ class InformatiqueController extends Controller
         $annee = $request->annee;
         $mention = $request->mention;
         $president = $request->president;
+        $docType = $request->docType;
 
-        $attestationAdmission = PDF::loadView('informatique.documents.attestion-adminission-pdf', compact('anneUniversitaire', 'etudiant', 'session', 'annee', 'mention', 'president'));
+        $attestationAdmission = PDF::loadView('informatique.documents.attestion-adminission-pdf', compact('anneUniversitaire', 'etudiant', 'session', 'annee', 'mention', 'president', 'docType'));
         return $attestationAdmission->stream();
         // return view('informatique.documents.attestion-adminission-pdf');
+    }
+
+    public function certifMaster() {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        $anneeAcademiques = AnneeAcademique::orderBy('id', 'desc')->get();
+        $sessions = ['JANVIER','FEVRIER', 'MARS', 'AVRIL', 'MAI', 'JUIN',
+            'JUILLET', 'AOUT', 'SEPTEMPBRE', 'OCTOBRE', 'NOVEMBRE', 'DECEMBRE'];
+        $mentions = ['INSUFISANT', 'PASSABLE', 'ASSEZ BIEN', ' BIEN', 'TRES BIEN'];
+        $etudiants = User::whereHas('inscriptions', function(Builder $query) use ($anneeAcademique){
+            $query->where('valide', 1)->where('annee_academique_id', $anneeAcademique->id);
+        })->get();
+
+        return view('informatique.documents.certificat-master', compact('etudiants', 'anneeAcademiques', 'anneeAcademique', 'sessions', 'mentions'));
+    }
+
+    public function certifMasterPdf(Request $request) {
+        $request->validate([
+            'annee_universitaire' => 'required|integer',
+            'etudiant' => 'required|integer',
+            'session' => 'required|date',
+            'annee' => 'required|digits:4',
+            'note' => 'required|numeric',
+            'mention' => 'required|string',
+            'president' => 'required|string',
+        ]);
+
+        Carbon::setLocale('fr');
+
+        $anneeUniversitaire = AnneeAcademique::findOrFail($request->annee_universitaire);
+        $etudiant = User::findOrFail($request->etudiant);
+        $dateDelivrance = $request->date_delivrance;
+        $president = $request->president;
+        $mention = $request->mention;
+        $session = $request->session;
+        $dateSession = Carbon::parse($session)->translatedFormat('d F Y');
+        $session = $dateSession;
+        // dd($dateSession);
+        $note = $request->note;
+
+        // dd($etudiant->classe($anneeUniversitaire->id));
+        if (!$etudiant->classe($anneeUniversitaire->id)) {
+            flashy()->error('Cet étudiant ne possède pas d\'inscription valide pour l\'année académique sélectionnée.');
+            return redirect()->back()->withInput();
+        }
+        // $certificatMaster = PDF::loadView('informatique.documents.certificat-master-pdf');
+        $certificatMaster = PDF::loadView('informatique.documents.certificat-master-pdf', compact('anneeUniversitaire', 'etudiant', 'dateDelivrance', 'president', 'mention', 'session', 'note'));
+        return $certificatMaster->stream();
+        // return view('informatique.documents.certificat-master-pdf');
     }
 
     public function showNotes(Request $request) {

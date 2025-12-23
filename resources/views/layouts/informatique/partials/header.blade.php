@@ -7,18 +7,18 @@
         </div>
         <div class="left-menu-header col">
             <ul>
-                <li>
+                {{-- <li>
                     <form class="form-inline search-form">
                         <div class="search-bg"><i class="fa fa-search"></i>
                         <input class="form-control-plaintext" placeholder="Search here.....">
                         </div>
                     </form>
                     <span class="d-sm-none mobile-search search-bg"><i class="fa fa-search"></i></span>
-                </li>
+                </li> --}}
                 @if (session()->get('selectedAnneeAcademique'))
                     @if (session()->get('lastAnneeAcademique')->id !== session()->get('selectedAnneeAcademique')->id)
                         <li>
-                            <span class="alert alert-warning" role="alert">
+                            <span class="alert alert-warning" style="font-size: 12px" role="alert">
                                 Vous êtes actuellement sur l'année académique {{ session()->get('selectedAnneeAcademique')->debut }} - {{ session()->get('selectedAnneeAcademique')->fin }}
                             </span>
                         </li>

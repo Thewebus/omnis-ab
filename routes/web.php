@@ -167,8 +167,10 @@ Route::group(['prefix' => 'informaticien', 'middleware' => ['auth:admins', 'info
     });
 
     Route::resource('signataires', SignataireController::class, ['as' => 'admin']);
-    Route::get('attestation-admission', [InformatiqueController::class, 'attestationAdmission'])->name('admin.attestation-admission');
+    Route::get('documents', [InformatiqueController::class, 'attestationAdmission'])->name('admin.attestation-admission');
     Route::post('attestation-admission-pdf', [InformatiqueController::class, 'attestationAdmissionPdf'])->name('admin.attestation-admission-pdf');
+    Route::get('certif-master', [InformatiqueController::class, 'certifMaster'])->name('admin.certif-master');
+    Route::post('certif-master-pdf', [InformatiqueController::class, 'certifMasterPdf'])->name('admin.certif-master-pdf');
 });
 
 Route::group(['prefix' => 'informaticien/notes', 'middleware' => ['auth:admins', 'informaticien']], function() {
@@ -202,6 +204,7 @@ Route::group(['prefix' => 'informaticien/inscription', 'middleware' => ['auth:ad
     Route::get('/inscriptions-validees', [InformatiqueController::class, 'inscriptionValideeListeEtudiant'])->name('admin.inscription-validee-liste-etudiant');
     Route::get('/etudiant/{etudiant_id}', [InformatiqueController::class, 'inscriptionDetails'])->name('admin.inscritpion-detail');
     Route::get('/fiche/{inscription_id}', [InformatiqueController::class, 'ficheInscriptionPdf'])->name('admin.inscritpion-fiche-pdf');
+    Route::get('/certif-scolarite/{inscription_id}', [InformatiqueController::class, 'certifScolaritePdf'])->name('admin.certif-scolarite-pdf');
     Route::get('/modification/{inscription_id}', [InformatiqueController::class, 'modifInscriptionForm'])->name('admin.inscritpion-modif-form');
     Route::post('/modification/{etudiant_id}', [InformatiqueController::class, 'modifInscriptionFormPost'])->name('admin.inscritpion-modif-form-post');
 });

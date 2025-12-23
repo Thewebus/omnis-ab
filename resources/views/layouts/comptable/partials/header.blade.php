@@ -18,7 +18,7 @@
                 @if (session()->get('selectedAnneeAcademique'))
                     @if (session()->get('lastAnneeAcademique')->id !== session()->get('selectedAnneeAcademique')->id)
                         <li>
-                            <span class="alert alert-warning" role="alert">
+                            <span class="alert alert-warning" style="font-size: 12px" role="alert">
                                 Vous êtes actuellement sur l'année académique {{ session()->get('selectedAnneeAcademique')->debut }} - {{ session()->get('selectedAnneeAcademique')->fin }}
                             </span>
                         </li>

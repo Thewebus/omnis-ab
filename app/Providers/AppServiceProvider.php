@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
 use App\Models\AnneeAcademique;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cookie;
@@ -26,6 +27,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        // 1. DÉFINIR LA LOCALE EN PREMIER
+        Carbon::setLocale('fr');
+        
+        // 2. Force le changement de locale de l'application
+        app()->setLocale('fr');
+        
+        // 3. Pour les dates Carbon
+        \Carbon\Carbon::setLocale('fr');
+        
+        // 4. Pour les dates diffForHumans()
+        \Carbon\Carbon::setHumanDiffOptions(\Carbon\Carbon::ONE_DAY_WORDS | \Carbon\Carbon::NO_ZERO_DIFF);
+
         // Share title to each page
         $project_title = '| OMNIS System';
         $allAnneeAcademiques = AnneeAcademique::orderBy('id', 'desc')->get();
@@ -33,9 +47,6 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('title', $project_title);
         View::share('allAnneeAcademiques', $allAnneeAcademiques);
-
-        // On défini le "français" comme langue globale de Carbon
-        \Carbon\Carbon::setLocale('fr');
 
         // Get cookie 
         view()->composer('layouts.informatique.master', function ($view) {

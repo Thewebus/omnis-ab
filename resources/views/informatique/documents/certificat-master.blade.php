@@ -1,8 +1,5 @@
 @extends('layouts.informatique.master')
-@php
-    $docTypeTitle = $docType == 'attestation_admission' ? ' d\'admission' : ' de réussite';
-@endphp
-@section('title')Attestation {{ $docTypeTitle }}
+@section('title')Certificat de réussite Master
  {{ $title }}
 @endsection
 
@@ -14,11 +11,11 @@
 @section('content')
 	@component('components.informatique.breadcrumb')
 		@slot('breadcrumb_title')
-			<h3>Attestation {{ $docTypeTitle }}</h3>
+			<h3>Certificat de réussite Master</h3>
 		@endslot
-		<li class="breadcrumb-item">Attestation {{ $docTypeTitle }}</li>
+		<li class="breadcrumb-item">Certificat de réussite Master</li>
 		{{-- <li class="breadcrumb-item">Data Tables</li> --}}
-		<li class="breadcrumb-item active">nouvelle attestation</li>
+		<li class="breadcrumb-item active">Nouvelle certificat</li>
 	@endcomponent
 	
 	<div class="container-fluid">
@@ -35,7 +32,7 @@
                             </div> --}}
                         </div>
                     </div>
-                    <form class="form theme-form" action="{{ route('admin.attestation-admission-pdf') }}" method="POST">
+                    <form class="form theme-form" action="{{ route('admin.certif-master-pdf') }}" method="POST">
                         @csrf
                         <div class="card-body">
                             <div class="row">
@@ -74,12 +71,13 @@
                                 <div class="mb-3 row">
                                     <label class="col-sm-3 col-form-label">Session</label>
                                     <div class="col-sm-9">
-                                        <select class="form-select digits @error('session') is-invalid @enderror" id="session" name="session">
+                                        <input class="form-control @error('session') is-invalid @enderror" type="date" name="session" value="{{ old("session") }}" placeholder="session" />
+                                        {{-- <select class="form-select digits @error('session') is-invalid @enderror" id="session" name="session">
                                             <option value="">Choisir la session</option>
                                             @foreach ($sessions as $session)
                                                 <option {{ old("session") ==  $session ? 'selected' : '' }} value="{{ $session }}">{{ $session }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                         @error('session')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -92,6 +90,17 @@
                                     <div class="col-sm-9">
                                         <input class="form-control @error('annee') is-invalid @enderror" type="number" name="annee" value="{{ old("annee") }}" placeholder="Année" />
                                         @error('annee')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label class="col-sm-3 col-form-label">Note</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control @error('note') is-invalid @enderror" type="number" step="0.1" name="note" value="{{ old("note") }}" placeholder="Note" />
+                                        @error('note')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -125,7 +134,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <input type="hidden" name="docType" value="{{ $docType }}" />
                             </div>
                         </div>
                         <div class="card-footer text-end">
