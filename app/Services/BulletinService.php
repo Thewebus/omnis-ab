@@ -1093,46 +1093,48 @@ class BulletinService {
     
             $dataAllEtudiants = [];
             foreach ($classe->etudiants() as $etudiant) {
-                $etudiantDatas = [];
-                $etudiantDatas[] = $etudiant->fullname;
-                $etudiantDatas[] = $etudiant->statut;
-                $totalCreditValidee = 0;
-    
-                foreach($classe->matieres->where('semestre', $semestre)->sortBy('numero_ordre')->where('semestre', $semestre) as $matiere) {
-                    $note = Note::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
-                        ->where('matiere_id', $matiere->id)
-                        ->where('classe_id', $classe->id)
-                        ->where('user_id', $etudiant->id)
-                        ->first();
-    
-                    if (!is_null($note)) {
-                        $moyenTD = 0;
-                        // J'ai ajouter un tableau vide dans le in_array ci dessous, cela semble fonctionner mais je ne sais si cela
-                        // va créer d'autres soucis après. Je regarde seulement.
-                        $diviseur = in_array('partiel_session_1', $note->notes_selectionnees ?? []) ? (count($note->notes_selectionnees) - 1) : count($note->notes_selectionnees);
-                        if (!is_null($note->notes_selectionnees) && count($note->notes_selectionnees) !== 0) {
-                            $sommeNote = 0;
-                            foreach($note->notes_selectionnees as $note_x) {
-                                $note_x == 'note_1' ? $sommeNote += $note->note_1 : '';
-                                $note_x == 'note_2' ? $sommeNote += $note->note_2 : '';
-                                $note_x == 'note_3' ? $sommeNote += $note->note_3 : '';
-                                $note_x == 'note_4' ? $sommeNote += $note->note_4 : '';
-                                $note_x == 'note_5' ? $sommeNote += $note->note_5 : '';
-                                $note_x == 'note_6' ? $sommeNote += $note->note_6 : '';
+                if ($etudiant) {
+                    $etudiantDatas = [];
+                    $etudiantDatas[] = $etudiant->fullname;
+                    $etudiantDatas[] = $etudiant->statut;
+                    $totalCreditValidee = 0;
+        
+                    foreach($classe->matieres->where('semestre', $semestre)->sortBy('numero_ordre')->where('semestre', $semestre) as $matiere) {
+                        $note = Note::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
+                            ->where('matiere_id', $matiere->id)
+                            ->where('classe_id', $classe->id)
+                            ->where('user_id', $etudiant->id)
+                            ->first();
+        
+                        if (!is_null($note)) {
+                            $moyenTD = 0;
+                            // J'ai ajouter un tableau vide dans le in_array ci dessous, cela semble fonctionner mais je ne sais si cela
+                            // va créer d'autres soucis après. Je regarde seulement.
+                            $diviseur = in_array('partiel_session_1', $note->notes_selectionnees ?? []) ? (count($note->notes_selectionnees) - 1) : count($note->notes_selectionnees);
+                            if (!is_null($note->notes_selectionnees) && count($note->notes_selectionnees) !== 0) {
+                                $sommeNote = 0;
+                                foreach($note->notes_selectionnees as $note_x) {
+                                    $note_x == 'note_1' ? $sommeNote += $note->note_1 : '';
+                                    $note_x == 'note_2' ? $sommeNote += $note->note_2 : '';
+                                    $note_x == 'note_3' ? $sommeNote += $note->note_3 : '';
+                                    $note_x == 'note_4' ? $sommeNote += $note->note_4 : '';
+                                    $note_x == 'note_5' ? $sommeNote += $note->note_5 : '';
+                                    $note_x == 'note_6' ? $sommeNote += $note->note_6 : '';
+                                }
+        
+                                $moyenTD = $diviseur !== 0 ? ($sommeNote / $diviseur) : 0;
                             }
-    
-                            $moyenTD = $diviseur !== 0 ? ($sommeNote / $diviseur) : 0;
                         }
+        
+                        $etudiantDatas[] = !is_null($note) ? number_format($moyenTD, 2) : 0;
+                        $etudiantDatas[] = !is_null($note) ? $note->partiel_session_1 : 0;
+                        $etudiantDatas[] = !is_null($note) ? $note->moyenne : 0;
+                        $etudiantDatas[] = $matiere->credit ?? 0;
+                        !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere->credit : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
                     }
-    
-                    $etudiantDatas[] = !is_null($note) ? number_format($moyenTD, 2) : 0;
-                    $etudiantDatas[] = !is_null($note) ? $note->partiel_session_1 : 0;
-                    $etudiantDatas[] = !is_null($note) ? $note->moyenne : 0;
-                    $etudiantDatas[] = $matiere->credit ?? 0;
-                    !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere->credit : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
+                    $etudiantDatas[] = $totalCreditValidee;
+                    array_push($dataAllEtudiants, $etudiantDatas);
                 }
-                $etudiantDatas[] = $totalCreditValidee;
-                array_push($dataAllEtudiants, $etudiantDatas);
             }
         }
         else {

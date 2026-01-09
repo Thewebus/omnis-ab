@@ -261,6 +261,12 @@
                     <li>
                         <a class="nav-link menu-title link-nav" href="{{ route('admin.certif-master') }}"><i data-feather="file"></i><span>Cert. réussite Master</span></a>
                     </li>
+                    <li>
+                        <a class="nav-link menu-title link-nav {{routeActive('admin.fiche-enrole-classe')}}" href="{{ route('admin.fiche-enrole-classe') }}"><i data-feather="file"></i><span>Fiche Enr. Ministre</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-link menu-title link-nav {{routeActive('admin.fiche-note-classe')}}" href="{{ route('admin.fiche-note-classe') }}"><i data-feather="file"></i><span>Fiche de note</span></a>
+                    </li>
                     <li class="sidebar-main-title">
                         <div>
                             <h6>Chat App</h6>

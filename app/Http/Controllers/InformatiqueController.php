@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FicheEnrolementExport;
 use PDF;
 use Carbon\Carbon;
 use App\Models\Note;
@@ -1395,6 +1396,47 @@ class InformatiqueController extends Controller
 
         return view('informatique.statistique.statistique', compact('session', 'semestre', 'dataStats'));
     }
+
+    public function ficheEnroleClasse() {
+        $classes = Classe::orderBy('nom')->get();
+        return view('informatique.documents.fiche-enrole-classe', compact('classes'));
+    }
+
+    public function ficheEnroleClassePdf(Request $request, $id) {
+        $classe = Classe::findOrFail($id);
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        $faculte = $classe->niveauFaculte->faculte;
+        $etudiants = $classe->etudiants();
+
+        return Excel::download(new FicheEnrolementExport($etudiants, $faculte, $anneeAcademique), "{$faculte->nom}_fiche_enrolement_ministere.xlsx");
+    }
+
+    public function ficheNoteClasse() {
+        $classes = Classe::orderBy('nom')->get();
+        return view('informatique.documents.fiche-note-classe', compact('classes'));
+    }
+
+    public function ficheNoteListeMatiere(Request $request, $id) {
+        $classe = Classe::findOrFail($id);
+        $matieres = Matiere::where('classe_id', $classe->id)->orderBy('semestre', 'ASC')->orderBy('nom', 'ASC')->get(); 
+        return view('informatique.documents.fiche-note-liste-matiere', compact('classe', 'matieres'));
+    }
+
+    public function ficheNoteClassePdf($id) {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        $matiere = Matiere::findOrFail($id);
+        $classe = $matiere->classe;
+        $dataBrute = (new OtherDataService)->notesMatiere($id);
+        // $classe = $dataBrute[0];
+        $matiere = $dataBrute[1];
+        $dataNotes = $dataBrute[2];
+        $notesSelectionnees = $dataBrute[3];
+        // dd($classe, $matiere, $dataNotes, $notesSelectionnees);
+        return PDF::loadView('informatique.documents.fiche-note-classe-pdf', compact('classe', 'matiere', 'dataNotes', 'notesSelectionnees', 'anneeAcademique'))->stream();
+        // return view('informatique.documents.fiche-note-classe-pdf', compact('etudiants', 'faculte', 'anneeAcademique'));
+        // return Excel::download(new FicheNoteExport($etudiants, $faculte, $anneeAcademique), "{$faculte->nom}_fiche_note_ministere.xlsx");
+    }
+
     /**
      * 
      * Cette fonction est faite pour corriger le fait que certains 

@@ -16,6 +16,11 @@ class Matiere extends Model
         return $this->belongsToMany(Professeur::class)->withPivot('volume_horaire', 'progression', 'statut', 'classe_id', 'annee_academique_id')->withTimestamps();
     }
 
+    public function professeur() {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        return $this->professeurs()->wherePivot('annee_academique_id', $anneeAcademique->id)->first();
+    }
+
     public function classe() {
         return $this->belongsTo(Classe::class);
     }

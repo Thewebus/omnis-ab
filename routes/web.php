@@ -171,6 +171,15 @@ Route::group(['prefix' => 'informaticien', 'middleware' => ['auth:admins', 'info
     Route::post('attestation-admission-pdf', [InformatiqueController::class, 'attestationAdmissionPdf'])->name('admin.attestation-admission-pdf');
     Route::get('certif-master', [InformatiqueController::class, 'certifMaster'])->name('admin.certif-master');
     Route::post('certif-master-pdf', [InformatiqueController::class, 'certifMasterPdf'])->name('admin.certif-master-pdf');
+
+    Route::prefix('fiche')->group(function () {
+        Route::get('fiche-enrole-classe', [InformatiqueController::class, 'ficheEnroleClasse'])->name('admin.fiche-enrole-classe');
+        Route::get('fiche-enrolement-minister-pdf/{classe_id}', [InformatiqueController::class, 'ficheEnroleClassePdf'])->name('admin.fiche-enrolement-minister-pdf');
+
+        Route::get('fiche-note-classe', [InformatiqueController::class, 'ficheNoteClasse'])->name('admin.fiche-note-classe');
+        Route::get('fiche-note-liste-matiere/{classe_id}', [InformatiqueController::class, 'ficheNoteListeMatiere'])->name('admin.fiche-note-liste-matiere');
+        Route::get('fiche-note-classe-pdf/{classe_id}', [InformatiqueController::class, 'ficheNoteClassePdf'])->name('admin.fiche-note-classe-pdf');
+    });
 });
 
 Route::group(['prefix' => 'informaticien/notes', 'middleware' => ['auth:admins', 'informaticien']], function() {
