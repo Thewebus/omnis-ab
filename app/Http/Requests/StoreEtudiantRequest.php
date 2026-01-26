@@ -46,7 +46,7 @@ class StoreEtudiantRequest extends FormRequest
             'id_permanent' => ['required', 'string'],
             'numero_table_bac' => ['required', 'string'],
             'code_ep' => ['required', 'string'],
-            'emargement' => ['required', 'string'],
+            'emargement' => ['nullable', 'string'],
             'responsable_legal' => 'required|string',
             'responsable_legal_precision' => 'nullable|string',
             'responsable_legal_fullname' => 'required|string',

@@ -49,6 +49,11 @@
             font-size: 25px;
         }
 
+        .logo {
+            position: absolute;
+            left: 10%;
+        }
+
         /* .left-section, .right-section {
             flex: 1;
             text-align: center;
@@ -230,6 +235,15 @@
                 ---------------------
                 <!-- Numéro de référence -->
                 <div class="reference-number">24219/R/SG/INFO</div>
+            </div>
+            <div class="logo">
+                @if (env('OWNER') == 'ua_bassam')
+                    <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua_bassam.png" width="500" alt="LOGO UA">
+                @elseif(env('OWNER') == 'ua_sp')
+                    <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua_sp.png" width="350" alt="LOGO UA">
+                @else
+                    <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua.png" width="450" alt="LOGO UA">
+                @endif
             </div>
             <div class="right-section">
                 UNION – DISCIPLINE – TRAVAIL<br>

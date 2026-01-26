@@ -12,7 +12,7 @@
         }
         .img {
             margin-bottom: 2em;
-            border: 1px solid #e6edef;
+            /* border: 1px solid #e6edef; */
             width: 30%;
             height: 11.5%;
             margin-top: -50px;
@@ -85,7 +85,13 @@
 <body>
     <div class="bloc-header">
         <div class="img">
-            <img src="https://ua.omnis-ci.com/assets/images/logo_ua.png" width="450" alt="LOGO UA">
+            @if (env('OWNER') == 'ua_bassam')
+                <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua_bassam.png" width="500" alt="LOGO UA">
+            @elseif(env('OWNER') == 'ua_sp')
+                <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua_sp.png" width="350" alt="LOGO UA">
+            @else
+                <img src="https://omnis-ab.uatlantique.org/assets/images/logo_ua.png" width="450" alt="LOGO UA">
+            @endif
         </div>
         <div class="ministere">
             <span>REPUBLIQUE DE CÔTE D'IVOIRE <br> -------------------------- <br></span>
@@ -99,11 +105,11 @@
         <span class="annee-academique">Année Universitaire {{ $anneUniversitaire->debut . ' - ' . $anneUniversitaire->fin }}</span>
     </div>
     <div class="faculte">
-        <h3>{{ $etudiant->classe($anneUniversitaire->id)->niveauFaculte->faculte->nom }}</h3> 
+        <h3>{{ $etudiant->classe($anneUniversitaire->id)->niveauFaculte->faculte->nom ?? 'NOM FACULTÉ' }}</h3> 
     </div>
     <div class="certif">
         <h2>CERTIFICAT {{ $docType == 'attestation_admission' ? 'D\'ADMISSION' : 'DE REUSSITE' }}</h2>
-        <h4>A LA {{ $etudiant->classe($anneUniversitaire->id)->nom }}</h4>
+        <h4>A LA {{ $etudiant->classe($anneUniversitaire->id)->nom ?? 'NOM CLASSE   '}}</h4>
     </div>
     <div class="text">
         Nous soussignés, Université de l'Atlantique, certifions que <br>
@@ -111,7 +117,7 @@
         Né(e) le <strong>{{ $etudiant->date_naissance->format('d/m/Y') }}</strong> à <strong>{{ $etudiant->lieu_naissance }}</strong> <br>
         inscrit sous le numéro de Carte d'étudiant : <strong>{{ $etudiant->matricule_etudiant }}</strong> <br>
         a satisfait aux épreuves de l'examen et obtenu la : <br>
-        <strong>{{ $etudiant->classe($anneUniversitaire->id)->nom }}</strong> <br>
+        <strong>{{ $etudiant->classe($anneUniversitaire->id)->nom ?? 'NOM CLASSE    '}}</strong> <br>
         à la session de <strong>{{ $session }} {{ $annee }}</strong>, avec la mention <strong>{{ $mention }}</strong> <br>
         Le présent certificat lui est délivré pour servir et valoir ce que de droit.
     </div>
@@ -125,8 +131,8 @@
         qu'il fera certifier conforme à l'originale par le Maire ou le Commissaire de police de sa résidence
     </div>
     <div class="pied-page">
+        <hr>
         @if (env('OWNER') == 'ua_bouake')
-            <hr>
             <div class="coordonne-ua">
                 Administration, Faculté et instituts : <br>
                 Bouaké - Rue Centre Commerce le Capitol  <br>
@@ -134,8 +140,23 @@
                 <span class="underline"> Arreté d'ouverture n°06157 du 06 Avril 2009</span>  <br>
                 E-mail : uatlantique.bouake@groupeatlantique.com / web : uatlantique.org
             </div>
+        @elseif(env('OWNER') == 'ua_bassam')
+            <div class="coordonne-ua">
+                Administration, Faculté et instituts : <br>
+                Grand-Bassam - Mockey ville, Carr Château  <br>
+                Tel : 0758399851 / 0171083223<br>
+                <span style="text-decoration: underline"> Arreté d'ouverture n°650 du 18 Juin 2019</span>  <br>
+                E-mail : infos@groupeatlantique.com
+            </div>
+        @elseif(env('OWNER') == 'ua_sp')
+            <div class="coordonne-ua">
+                Administration, Faculté et instituts : <br>
+                San Pedro - Quartier Balmer  <br>
+                Tel : 0585795454 / 0703739898<br>
+                <span style="text-decoration: underline"> Arreté d'ouverture n°608 du 18 Juin 2019</span>  <br>
+                E-mail : infos@groupeatlantique.com
+            </div>
         @else
-            <hr>
             <div class="ua">UNIVERSITÉ DE L'ATLANTIQUE</div>
             <div class="coordonne-ua">
                 Cocody - 2 Plateaux, Saint Jacques, derrière l'ENA, Rue J17 <br>

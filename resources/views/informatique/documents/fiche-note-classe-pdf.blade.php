@@ -145,7 +145,7 @@
         </tr>
         <tr>
             <td class="label">ENSEIGNANT :</td>
-            <td colspan="2">{{ $matiere->professeur()->fullname }}</td>
+            <td colspan="2">{{ $matiere->professeur()?->fullname }}</td>
             <td class="label" style="width: 130px;">EMARGEMENT</td>
             <td style="width: 150px;">
                 {{-- Mgt --}}

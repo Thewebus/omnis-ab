@@ -238,9 +238,9 @@
         }
 
         .universite-name {
-            font-weight: bold;
+            /* font-weight: bold; */
             font-size: 12pt;
-            margin-top: 15px;
+            margin-top: 50px;
             /* margin-left: 20%; */
             text-align: center;
         }
@@ -346,12 +346,46 @@
     </div>
     <div style="width: 100%">
         <div class="universite-name">
-            @if (env('OWNER') == 'ua_bouake' || env('OWNER') == 'ua_sp' || env('OWNER') == 'ua_abidjan')
+            <hr>
+            {{-- @if (env('OWNER') == 'ua_bouake' || env('OWNER') == 'ua_sp' || env('OWNER') == 'ua_abidjan')
                 UNIVERSITÉ DE L'ATLANTIQUE
             @elseif (env('OWNER') == 'ua_sp')
                 UNIVERSITE DES JEUNES FILLES DE GRAND-BASSAM
             @else
                 UNIVERSITÉ DE L'ATLANTIQUE
+            @endif --}}
+            @if (env('OWNER') == 'ua_bouake')
+                <div class="coordonne-ua">
+                    Administration, Faculté et instituts : <br>
+                    Bouaké - Rue Centre Commerce le Capitol  <br>
+                    Tel : 2731658301 / 0749159961 / 0779816010 / 0709126473 <br>
+                    <span class="underline"> Arreté d'ouverture n°06157 du 06 Avril 2009</span>  <br>
+                    E-mail : uatlantique.bouake@groupeatlantique.com / web : uatlantique.org
+                </div>
+            @elseif(env('OWNER') == 'ua_bassam')
+                <div class="coordonne-ua">
+                    Administration, Faculté et instituts : <br>
+                    Grand-Bassam - Mockey ville, Carr Château  <br>
+                    Tel : 0758399851 / 0171083223<br>
+                    <span style="text-decoration: underline"> Arreté d'ouverture n°650 du 18 Juin 2019</span>  <br>
+                    E-mail : infos@groupeatlantique.com
+                </div>
+            @elseif(env('OWNER') == 'ua_sp')
+                <div class="coordonne-ua">
+                    Administration, Faculté et instituts : <br>
+                    San Pedro - Quartier Balmer  <br>
+                    Tel : 0585795454 / 0703739898<br>
+                    <span style="text-decoration: underline"> Arreté d'ouverture n°608 du 18 Juin 2019</span>  <br>
+                    E-mail : infos@groupeatlantique.com
+                </div>
+            @else
+                <div class="ua">UNIVERSITÉ DE L'ATLANTIQUE</div>
+                <div class="coordonne-ua">
+                    Cocody - 2 Plateaux, Saint Jacques, derrière l'ENA, Rue J17 <br>
+                    06 BP 6631 Abidjan 06 Tél : +225 01 02 02 46 46 / 01 42 33 85 85  <br>
+                    E-mail: scolarite@groupeatlantique.com / Site Web : uatlantique.org <br>
+                    Arrêté d'ouverture n°0210 du 11 sept. 2000
+                </div>
             @endif
         </div>
     </div>

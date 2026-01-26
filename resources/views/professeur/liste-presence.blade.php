@@ -41,31 +41,33 @@
                             </div>
                         </div>
                         @foreach ($matiere->classe->etudiants() as $etudiant)
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            {{ $loop->iteration }}
-                                        </div>
-                                        <div class="col-6">
-                                            <input class="form-control" type="text" disabled value="{{ $etudiant->fullname }}">
-                                            <input type="hidden" name="matiere_id" value="{{ $matiere->id }}">
-                                        </div>
-                                        <div class="col-5">
-                                            <div class="form-group m-t-10 m-checkbox-inline mb-0 custom-radio-ml">
-                                                <div class="radio radio-primary">
-                                                    <input id="present{{ $etudiant->id }}" type="radio" name="{{ $etudiant->id }}" value="1">
-                                                    <label class="mb-0" for="present{{ $etudiant->id }}">Présent</label>
-                                                </div>
-                                                <div class="radio radio-primary">
-                                                    <input id="absent{{ $etudiant->id }}" type="radio" checked name="{{ $etudiant->id }}" value="0">
-                                                    <label class="mb-0" for="absent{{ $etudiant->id }}">Absent</label>
+                            @if ($etudiant)
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-1">
+                                                {{ $loop->iteration }}
+                                            </div>
+                                            <div class="col-6">
+                                                <input class="form-control" type="text" disabled value="{{ $etudiant->fullname }}">
+                                                <input type="hidden" name="matiere_id" value="{{ $matiere->id }}">
+                                            </div>
+                                            <div class="col-5">
+                                                <div class="form-group m-t-10 m-checkbox-inline mb-0 custom-radio-ml">
+                                                    <div class="radio radio-primary">
+                                                        <input id="present{{ $etudiant->id }}" type="radio" name="{{ $etudiant->id }}" value="1">
+                                                        <label class="mb-0" for="present{{ $etudiant->id }}">Présent</label>
+                                                    </div>
+                                                    <div class="radio radio-primary">
+                                                        <input id="absent{{ $etudiant->id }}" type="radio" checked name="{{ $etudiant->id }}" value="0">
+                                                        <label class="mb-0" for="absent{{ $etudiant->id }}">Absent</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            @endif
                         @endforeach
 
                         <button class="btn btn-light m-t-15 float-right" type="submit">Valider</button>

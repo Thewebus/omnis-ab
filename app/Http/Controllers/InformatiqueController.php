@@ -1235,6 +1235,7 @@ class InformatiqueController extends Controller
         $mention = $request->mention;
         $president = $request->president;
         $docType = $request->docType;
+        // dd($etudiant->classe($anneUniversitaire->id));
 
         $attestationAdmission = PDF::loadView('informatique.documents.attestion-adminission-pdf', compact('anneUniversitaire', 'etudiant', 'session', 'annee', 'mention', 'president', 'docType'));
         return $attestationAdmission->stream();
@@ -1425,6 +1426,7 @@ class InformatiqueController extends Controller
     public function ficheNoteClassePdf($id) {
         $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
         $matiere = Matiere::findOrFail($id);
+        // dd($matiere->professeurs, $anneeAcademique);
         $classe = $matiere->classe;
         $dataBrute = (new OtherDataService)->notesMatiere($id);
         // $classe = $dataBrute[0];
