@@ -777,71 +777,73 @@ class BulletinService {
     
             $dataAllEtudiants = [];
             foreach ($classe->etudiants() as $etudiant) {
-                $etudiantDatas = [];
-                $etudiantDatas[] = $etudiant->fullname . ' Né(e) le ' . $etudiant->date_naissance->format('d/m/Y') . ' à ' . $etudiant->lieu_naissance;
-                
-                $totalCreditValidee = 0;
-
-                $ueMatieres = $classe->matieres
-                    ->sortBy('numero_ordre')
-                    ->where('semestre', $semestre)
-                    ->groupBy('uniteEnseignement.nom')
-                    ->toArray();
-                
-                $totalUeValidees = 0;
-                foreach($ueMatieres as $ueMatiere) {
-                    $moyCreditUe = 0;
-                    $moyenneUe = 0;
-                    $sommeCreditUe = 0;
-
-                    foreach($ueMatiere as $matiere) {
-                        $note = Note::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
-                            ->where('matiere_id', $matiere['id'])
-                            ->where('classe_id', $classe->id)
-                            ->where('user_id', $etudiant->id)
-                            ->first();
-
-                        if(!is_null($note)) {
-                            $moyenTD = 0;
-                            $diviseur = in_array('partiel_session_1', $note->notes_selectionnees ?? []) ? (count($note->notes_selectionnees) - 1) : count($note->notes_selectionnees);
-                            
-                            if (!is_null($note->notes_selectionnees) && count($note->notes_selectionnees) !== 0) {
-                                $sommeNote = 0;
-                                foreach($note->notes_selectionnees as $note_x) {
-                                    $note_x == 'note_1' ? $sommeNote += $note->note_1 : '';
-                                    $note_x == 'note_2' ? $sommeNote += $note->note_2 : '';
-                                    $note_x == 'note_3' ? $sommeNote += $note->note_3 : '';
-                                    $note_x == 'note_4' ? $sommeNote += $note->note_4 : '';
-                                    $note_x == 'note_5' ? $sommeNote += $note->note_5 : '';
-                                    $note_x == 'note_6' ? $sommeNote += $note->note_6 : '';
+                if ($etudiant) {
+                    $etudiantDatas = [];
+                    $etudiantDatas[] = $etudiant->fullname . ' Né(e) le ' . $etudiant->date_naissance->format('d/m/Y') . ' à ' . $etudiant->lieu_naissance;
+                    
+                    $totalCreditValidee = 0;
+    
+                    $ueMatieres = $classe->matieres
+                        ->sortBy('numero_ordre')
+                        ->where('semestre', $semestre)
+                        ->groupBy('uniteEnseignement.nom')
+                        ->toArray();
+                    
+                    $totalUeValidees = 0;
+                    foreach($ueMatieres as $ueMatiere) {
+                        $moyCreditUe = 0;
+                        $moyenneUe = 0;
+                        $sommeCreditUe = 0;
+    
+                        foreach($ueMatiere as $matiere) {
+                            $note = Note::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
+                                ->where('matiere_id', $matiere['id'])
+                                ->where('classe_id', $classe->id)
+                                ->where('user_id', $etudiant->id)
+                                ->first();
+    
+                            if(!is_null($note)) {
+                                $moyenTD = 0;
+                                $diviseur = in_array('partiel_session_1', $note->notes_selectionnees ?? []) ? (count($note->notes_selectionnees) - 1) : count($note->notes_selectionnees);
+                                
+                                if (!is_null($note->notes_selectionnees) && count($note->notes_selectionnees) !== 0) {
+                                    $sommeNote = 0;
+                                    foreach($note->notes_selectionnees as $note_x) {
+                                        $note_x == 'note_1' ? $sommeNote += $note->note_1 : '';
+                                        $note_x == 'note_2' ? $sommeNote += $note->note_2 : '';
+                                        $note_x == 'note_3' ? $sommeNote += $note->note_3 : '';
+                                        $note_x == 'note_4' ? $sommeNote += $note->note_4 : '';
+                                        $note_x == 'note_5' ? $sommeNote += $note->note_5 : '';
+                                        $note_x == 'note_6' ? $sommeNote += $note->note_6 : '';
+                                    }
+            
+                                    $moyenTD = $diviseur !== 0 ? ($sommeNote / $diviseur) : 0;
                                 }
-        
-                                $moyenTD = $diviseur !== 0 ? ($sommeNote / $diviseur) : 0;
                             }
+    
+                            $etudiantDatas[] = !is_null($note) ? number_format($moyenTD, 2) : 0;
+                            $etudiantDatas[] = !is_null($note) ? $note->partiel_session_1 : 0;
+                            $etudiantDatas[] = !is_null($note) ? $this->nombreFormatDeuxDecimal($note->moyenne) : 0;
+                            
+                            $moyCreditUe += !is_null($note) ? $note->moyenne * $matiere['credit'] : 0;
+                            $sommeCreditUe += $matiere['credit'];
+                            !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere['credit'] : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
                         }
-
-                        $etudiantDatas[] = !is_null($note) ? number_format($moyenTD, 2) : 0;
-                        $etudiantDatas[] = !is_null($note) ? $note->partiel_session_1 : 0;
-                        $etudiantDatas[] = !is_null($note) ? $this->nombreFormatDeuxDecimal($note->moyenne) : 0;
-                        
-                        $moyCreditUe += !is_null($note) ? $note->moyenne * $matiere['credit'] : 0;
-                        $sommeCreditUe += $matiere['credit'];
-                        !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere['credit'] : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
+    
+                        $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                        $etudiantDatas[] = $this->nombreFormatDeuxDecimal($moyenneUe);
+                        $etudiantDatas[] = $moyenneUe >= 10 ? 'V' : 'R';
+    
+                        $totalUeValidees += $moyenneUe >= 10 ? 1 : 0;
+    
                     }
-
-                    $moyenneUe = $moyCreditUe / $sommeCreditUe;
-                    $etudiantDatas[] = $this->nombreFormatDeuxDecimal($moyenneUe);
-                    $etudiantDatas[] = $moyenneUe >= 10 ? 'V' : 'R';
-
-                    $totalUeValidees += $moyenneUe >= 10 ? 1 : 0;
-
+    
+                    $etudiantDatas[] = $totalUeValidees . '/' . count($ueMatieres);
+                    $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
+                    $etudiantDatas[] = $totalUeValidees == count($ueMatieres) ? 'ADMIS' : 'AJOURNE';
+    
+                    array_push($dataAllEtudiants, $etudiantDatas);
                 }
-
-                $etudiantDatas[] = $totalUeValidees . '/' . count($ueMatieres);
-                $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
-                $etudiantDatas[] = $totalUeValidees == count($ueMatieres) ? 'ADMIS' : 'AJOURNE';
-
-                array_push($dataAllEtudiants, $etudiantDatas);
             }
         }
         else {
