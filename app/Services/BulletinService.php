@@ -782,6 +782,7 @@ class BulletinService {
                     $etudiantDatas[] = $etudiant->fullname . ' Né(e) le ' . $etudiant->date_naissance->format('d/m/Y') . ' à ' . $etudiant->lieu_naissance;
                     
                     $totalCreditValidee = 0;
+                    $totalCreditUeValide = 0;
     
                     $ueMatieres = $classe->matieres
                         ->sortBy('numero_ordre')
@@ -791,10 +792,12 @@ class BulletinService {
                     
                     $totalUeValidees = 0;
                     foreach($ueMatieres as $ueMatiere) {
+                        $totalCreditParUe = 0;
+
                         $moyCreditUe = 0;
                         $moyenneUe = 0;
                         $sommeCreditUe = 0;
-    
+                        
                         foreach($ueMatiere as $matiere) {
                             $note = Note::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
                                 ->where('matiere_id', $matiere['id'])
@@ -827,10 +830,15 @@ class BulletinService {
                             
                             $moyCreditUe += !is_null($note) ? $note->moyenne * $matiere['credit'] : 0;
                             $sommeCreditUe += $matiere['credit'];
+                            // Total crédit validés par matière (ancienne formule)
                             !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere['credit'] : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
+                            // Total crédit UE
+                            !is_null($note) ? $totalCreditParUe += $matiere['credit'] : $totalCreditParUe += 0;
                         }
-    
+                            
                         $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                        // Total crédit validés par UE (nouvelle formule)
+                        $totalCreditUeValide += $moyenneUe >= 10 ? $totalCreditParUe : 0;
                         $etudiantDatas[] = $this->nombreFormatDeuxDecimal($moyenneUe);
                         $etudiantDatas[] = $moyenneUe >= 10 ? 'V' : 'R';
     
@@ -839,7 +847,13 @@ class BulletinService {
                     }
     
                     $etudiantDatas[] = $totalUeValidees . '/' . count($ueMatieres);
-                    $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
+
+                    // Total crédit validés (somme crédit matière validée) (ancienne formule)
+                    // $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
+
+                    // Total crédit validés (somme crédit UE validée) (nouvelle formule)
+                    $etudiantDatas[] = $totalCreditUeValide . '/' . $totalCreditUe;
+                    
                     $etudiantDatas[] = $totalUeValidees == count($ueMatieres) ? 'ADMIS' : 'AJOURNE';
     
                     array_push($dataAllEtudiants, $etudiantDatas);
@@ -950,6 +964,7 @@ class BulletinService {
                 $etudiantDatas[] = $etudiant->fullname . ' Né(e) le' . $etudiant->date_naissance->format('d/m/Y') . ' à ' . $etudiant->lieu_naissance;
                 
                 $totalCreditValidee = 0;
+                $totalCreditUeValide = 0;
 
                 $ueMatieres = $classe->matieres
                     ->sortBy('numero_ordre')
@@ -960,6 +975,8 @@ class BulletinService {
                 $totalUeValidees = 0;
     
                 foreach($ueMatieres as $ueMatiere) {
+                    $totalCreditParUe = 0;
+
                     $moyCreditUe = 0;
                     $moyenneUe = 0;
                     $sommeCreditUe = 0;
@@ -978,8 +995,8 @@ class BulletinService {
                                 $etudiantDatas[] = !is_null($note) ? '-' : '-';
 
                                 $moyCreditUe += !is_null($note) ? $note->moyenne * $matiere['credit'] : 0;
+                                // Total crédit validés par matière (ancienne formule)
                                 !is_null($note) ? ($note->moyenne >= 10 ? $totalCreditValidee += $matiere['credit'] : $totalCreditValidee += 0) : $totalCreditValidee += 0  ;
-
                             }
                             else {
                                 $etudiantDatas[] = !is_null($note) ? '-' : 0;
@@ -992,10 +1009,14 @@ class BulletinService {
                         }
                         
                         $sommeCreditUe += $matiere['credit'];
+                        // Total crédit UE
+                        !is_null($note) ? $totalCreditParUe += $matiere['credit'] : $totalCreditParUe += 0;
                     }
 
     
                     $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                    // Total crédit validés par UE (nouvelle formule)
+                    $totalCreditUeValide += $moyenneUe >= 10 ? $totalCreditParUe : 0;
                     $etudiantDatas[] = $this->nombreFormatDeuxDecimal($moyenneUe);
                     $etudiantDatas[] = $moyenneUe >= 10 ? 'V' : 'R';
 
@@ -1004,7 +1025,12 @@ class BulletinService {
                 }
 
                 $etudiantDatas[] = $totalUeValidees . '/' . count($ueMatieres);
-                $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
+                // Total crédit validés (somme crédit matière validée) (ancienne formule)
+                // $etudiantDatas[] = $totalCreditValidee . '/' . $totalCreditUe;
+
+                // Total crédit validés (somme crédit UE validée) (nouvelle formule)
+                $etudiantDatas[] = $totalCreditUeValide . '/' . $totalCreditUe;
+                
                 $etudiantDatas[] = $totalUeValidees == count($ueMatieres) ? 'ADMIS' : 'AJOURNE';
 
                 // $etudiantDatas[] = $totalCreditValidee;
