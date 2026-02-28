@@ -173,36 +173,35 @@ class BulletinService {
         $moyEu = [];
 
         foreach($listeEtudiants as $etudiant) {
-            if ($etudiant == null) {
-                continue;
-            }
-            
-            $moyenneCoef = 0;
-            $totalCred = $matieres->count() > 0 ? 0 : 1;
-            foreach($matieres as $matiere) {
-                $notes = Note::where(['annee_academique_id' => $anneeAcademique->id])
-                    ->where(['classe_id' => $classe->id])
-                    ->where(['matiere_id' => $matiere->id])
-                    ->where(['user_id' => $etudiant->id])
-                    ->first();
-
-                if ($session == 1) {
-                    $moyenne = $notes ? ($notes->moyenne ?? 0) : 0;
-                } else {
-                    if ($notes && $notes->moyenne < 10) {
-                        $moyenne = $notes->partiel_session_2 ?? 0;
-                    } else {
+            if ($etudiant) {
+                $moyenneCoef = 0;
+                $totalCred = $matieres->count() > 0 ? 0 : 1;
+                // dd($matieres);
+                foreach($matieres as $matiere) {
+                    $notes = Note::where(['annee_academique_id' => $anneeAcademique->id])
+                        ->where(['classe_id' => $classe->id])
+                        ->where(['matiere_id' => $matiere->id])
+                        ->where(['user_id' => $etudiant->id])
+                        ->first();
+    
+                    if ($session == 1) {
                         $moyenne = $notes ? ($notes->moyenne ?? 0) : 0;
+                    } else {
+                        if ($notes && $notes->moyenne < 10) {
+                            $moyenne = $notes->partiel_session_2 ?? 0;
+                        } else {
+                            $moyenne = $notes ? ($notes->moyenne ?? 0) : 0;
+                        }
                     }
+    
+                    $notes ? ($moyenneCoef += $moyenne * $matiere->credit) : $moyenneCoef += 0;
+                    $totalCred += $matiere->credit;
                 }
-
-                $notes ? ($moyenneCoef += $moyenne * $matiere->credit) : $moyenneCoef += 0;
-                $totalCred += $matiere->credit;
+                $moyenneUe = number_format(($moyenneCoef / $totalCred), 2);
+                array_push($moyEu, [
+                    $session == 1 ? 'moyenne' : 'partiel_session_2' => $moyenneUe
+                ]);
             }
-            $moyenneUe = number_format(($moyenneCoef / $totalCred), 2);
-            array_push($moyEu, [
-                $session == 1 ? 'moyenne' : 'partiel_session_2' => $moyenneUe
-            ]);
         }
 
         return collect($moyEu);
