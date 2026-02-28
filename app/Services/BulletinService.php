@@ -167,6 +167,7 @@ class BulletinService {
 
     public function moyenneUe(int $classeId, int $ueId, int $session = 1) {
         $classe = Classe::findOrFail($classeId);
+        dd($classe);
         $matieres = Matiere::where(['classe_id' => $classe->id])->where(['unite_enseignement_id' => $ueId])->get();
         $listeEtudiants = $this->listeEtudiantBulletion($classe, $session);
         $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
@@ -176,7 +177,6 @@ class BulletinService {
             if ($etudiant) {
                 $moyenneCoef = 0;
                 $totalCred = $matieres->count() > 0 ? 0 : 1;
-                // dd($matieres);
                 foreach($matieres as $matiere) {
                     $notes = Note::where(['annee_academique_id' => $anneeAcademique->id])
                         ->where(['classe_id' => $classe->id])
