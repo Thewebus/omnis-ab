@@ -173,6 +173,10 @@ class BulletinService {
         $moyEu = [];
 
         foreach($listeEtudiants as $etudiant) {
+            if ($etudiant == null) {
+                continue;
+            }
+            
             $moyenneCoef = 0;
             $totalCred = $matieres->count() > 0 ? 0 : 1;
             foreach($matieres as $matiere) {
