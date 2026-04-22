@@ -797,7 +797,7 @@ class BulletinService {
                     $totalUeValidees = 0;
                     foreach($ueMatieres as $ueMatiere) {
                         $totalCreditParUe = 0;
-
+                        $noteRepechage = null;
                         $moyCreditUe = 0;
                         $moyenneUe = 0;
                         $sommeCreditUe = 0;
@@ -810,6 +810,15 @@ class BulletinService {
                                 ->first();
     
                             if(!is_null($note)) {
+                                // dump($etudiant->fullname);
+
+                                // dump($ueMatiere[0]['nom']);
+
+                                // dump($matiere['nom']);
+
+                                // dump($note->toArray());
+
+                                $noteRepechage = $note->note_repechage;
                                 $moyenTD = 0;
                                 $diviseur = in_array('partiel_session_1', $note->notes_selectionnees ?? []) ? (count($note->notes_selectionnees) - 1) : count($note->notes_selectionnees);
                                 
@@ -839,8 +848,22 @@ class BulletinService {
                             // Total crédit UE
                             !is_null($note) ? $totalCreditParUe += $matiere['credit'] : $totalCreditParUe += 0;
                         }
-                            
-                        $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                        
+                        // $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                        // // if($moyenneUe >= $noteRepechage && $moyenneUe < 10) {
+                        // //     $moyenneUe = 10;
+                        // // } else {
+                        // //     $moyenneUe = $moyCreditUe / $sommeCreditUe;
+                        // // }
+
+                        // Nouvelle formule de calcul de la moyenne UE avec prise en compte de la note de repêchage
+                        $moyenneCalculee = $moyCreditUe / $sommeCreditUe;
+                        $moyenneUe = $moyenneCalculee;
+
+                        if (!is_null($noteRepechage) && $moyenneCalculee >= $noteRepechage && $moyenneCalculee < 10) {
+                            $moyenneUe = 10;
+                        }
+                        
                         // Total crédit validés par UE (nouvelle formule)
                         $totalCreditUeValide += $moyenneUe >= 10 ? $totalCreditParUe : 0;
                         $etudiantDatas[] = $this->nombreFormatDeuxDecimal($moyenneUe);
@@ -863,6 +886,7 @@ class BulletinService {
                     array_push($dataAllEtudiants, $etudiantDatas);
                 }
             }
+            // die;
         }
         else {
             $identifiant['colspan'] = 1;

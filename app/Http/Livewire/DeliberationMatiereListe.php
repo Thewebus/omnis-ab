@@ -17,8 +17,9 @@ class DeliberationMatiereListe extends Component
     protected $listeners = ['classeSelected'];
 
     public function classeSelected($classe) {
-        $this->classe = Classe::findOrFail($classe['id']) ;
-        $this->matieres = Matiere::where('classe_id', $this->classe['id'])->orderBy('nom', 'ASC')->get();
+        $this->classe = Classe::findOrFail($classe['id']);
+        // $this->matieres = Matiere::where('classe_id', $this->classe['id'])->orderBy('nom', 'ASC')->get();
+        $this->matieres = $this->classe->matieres;
         $this->ues = $this->classe->uniteEnseignements->unique();
         // $this->ues = $this->matieres->groupBy('uniteEnseignement.nom')->toArray();
         // $this->ues = array_unique(array_column($this->classe->uniteEnseignements->toArray(), 'nom'));

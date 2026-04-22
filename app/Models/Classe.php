@@ -29,6 +29,7 @@ class Classe extends Model
             ->with('etudiant')
             ->get()
             ->pluck('etudiant')
+            ->filter()
             ->sortBy('fullname');
     }
 

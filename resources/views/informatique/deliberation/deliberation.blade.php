@@ -10,7 +10,7 @@
 @livewireStyles
 <style>
     .right-divider {
-        border-right: 3px dotted #0d6efd
+        border-right: 1px dotted #0d6efd
     }
 
 	.my-custom-scrollbar {
