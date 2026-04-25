@@ -78,7 +78,7 @@ class DeliberationStatRepechage extends Component
                 foreach($this->matieresNotes as $note) {
                     if($note->moyenne >= $this->note && $note->moyenne < 10) {
                         $note->update([
-                            'moyenne' => 10,
+                            // 'moyenne' => 10,
                             'note_repechage' => $this->note,
                             'status' => 'admis',
                         ]);
@@ -93,7 +93,7 @@ class DeliberationStatRepechage extends Component
                 foreach ($this->notes as $note) {
                     if($note->moyenne >= $this->note && $note->moyenne < 10) {
                         $note->update([
-                            'moyenne' => 10,
+                            // 'moyenne' => 10,
                             'note_repechage' => $this->note,
                             'status' => 'admis',
                         ]);
