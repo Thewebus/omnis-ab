@@ -32,12 +32,12 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Matières</th>
-                                            <th scope="col">Note 1</th>
-                                            <th scope="col">Note 2</th>
-                                            <th scope="col">Note 3</th>
-                                            <th scope="col">Note 4</th>
-                                            <th scope="col">Note 5</th>
-                                            <th scope="col">Note 6</th>
+                                            <th scope="col">Nte 1</th>
+                                            <th scope="col">Nte 2</th>
+                                            <th scope="col">Nte 3</th>
+                                            <th scope="col">Nte 4</th>
+                                            <th scope="col">Nte 5</th>
+                                            <th scope="col">Nte 6</th>
                                             <th scope="col">Moyenne</th>
                                             <th scope="col">Partiel sess. 1</th>
                                             <th scope="col">Partiel sess. 2</th>
@@ -47,6 +47,14 @@
                                     </thead>
                                     <tbody>
 										@foreach ($dataNotesSem1 as $dataNote)
+											@php
+												$moyEu = $dataNote['moyenne'];
+												$repechage = false;
+												if (!is_null($dataNote['note_repechage']) && $moyEu >= $dataNote['note_repechage'] && $moyEu < 10) {
+													$moyEu = 10;
+													$repechage = true;
+												}
+											@endphp
 											<tr>
 												<th scope="row">{{ $loop->iteration }}</th>
 												<td>{{ $dataNote['nom_matiere'] }}</td>
@@ -56,7 +64,7 @@
 												<td>{{ $dataNote['note_4'] }}</td>
 												<td>{{ $dataNote['note_5'] }}</td>
 												<td>{{ $dataNote['note_6'] }}</td>
-												<td>{{ $dataNote['moyenne'] }}</td>
+												<td>{{ $moyEu }}</td>
 												<td>{{ $dataNote['partiel_session_1'] }}</td>
 												<td>{{ $dataNote['partiel_session_2'] }}</td>
 												{{-- <td>{{ $dataNote['partiel_session_2'] }}</td> --}}
@@ -79,7 +87,7 @@
 				</div>
 			</div>
 
-			@isset($dataNotesSem2)
+			@if(count($dataNotesSem2) > 0)
 				<div class="col-sm-12">
 					<div class="card">
 						<div class="card-header">
@@ -139,7 +147,7 @@
 						</div>
 					</div>
 				</div>
-			@endisset
+			@endif
 		</div>
 	</div>
 

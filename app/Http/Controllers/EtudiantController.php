@@ -597,6 +597,7 @@ class EtudiantController extends Controller
         $inscription = $user->inscription($anneeAcademique->id);
         $dataNotesSem1 = $data->noteEtudiant($inscription->id, 1);
         $dataNotesSem2 = $data->noteEtudiant($inscription->id, 2);
+
         return view('etudiant.liste-matieres', compact('dataNotesSem1', 'dataNotesSem2'));
     }
 

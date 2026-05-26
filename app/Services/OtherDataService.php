@@ -149,19 +149,23 @@ class OtherDataService {
             $notes = Note::where('user_id', $etudiant->id)->where('annee_academique_id', $anneeAcademique->id)
             ->where('classe_id', $matiere->classe->id)->where('matiere_id', $matiere->id)->first();
             
-            array_push($dataNotes, [
-                'nom_matiere' => $matiere->nom,
-                'note_1' => $notes->note_1 ?? 'NONE',
-                'note_2' => $notes->note_2 ?? 'NONE',
-                'note_3' => $notes->note_3 ?? 'NONE',
-                'note_4' => $notes->note_4 ?? 'NONE',
-                'note_5' => $notes->note_5 ?? 'NONE',
-                'note_6' => $notes->note_6 ?? 'NONE',
-                'moyenne' => $notes->moyenne ?? 'NONE',
-                'partiel_session_1' => $notes->partiel_session_1 ?? 'NONE',
-                'partiel_session_2' => (!is_null($notes) ? $notes->moyenne < 10 : 'NONE') ? (!is_null($notes) ? $notes->partiel_session_2 : 'NONE') : 'NONE',
-                'decision_finale' => $notes->status ?? 'NONE'
-            ]);
+            if ($notes) {
+                array_push($dataNotes, [
+                    'nom_matiere' => $matiere->nom,
+                    'note_1' => $notes->note_1 ?? 'NONE',
+                    'note_2' => $notes->note_2 ?? 'NONE',
+                    'note_3' => $notes->note_3 ?? 'NONE',
+                    'note_4' => $notes->note_4 ?? 'NONE',
+                    'note_5' => $notes->note_5 ?? 'NONE',
+                    'note_6' => $notes->note_6 ?? 'NONE',
+                    'moyenne' => $notes->moyenne ?? 'NONE',
+                    'note_repechage' => $notes?->note_repechage,
+                    'note_repechage_session_2'=> $notes?->note_repechage_session_2,
+                    'partiel_session_1' => $notes->partiel_session_1 ?? 'NONE',
+                    'partiel_session_2' => (!is_null($notes) ? $notes->moyenne < 10 : 'NONE') ? (!is_null($notes) ? $notes->partiel_session_2 : 'NONE') : 'NONE',
+                    'decision_finale' => $notes->status ?? 'NONE'
+                ]);
+            }
 
         }
 

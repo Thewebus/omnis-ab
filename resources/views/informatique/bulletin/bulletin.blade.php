@@ -268,7 +268,11 @@
                                                                 @php
                                                                     $rowspan = count($uniteEnseignements) - 1;
                                                                     $credEu = array_sum(array_column($uniteEnseignements, 'credit'));
+                                                                    $noteRepechage = max(array_column($uniteEnseignements, 'note_repechage'));
                                                                     $moyEu = array_sum(array_column($uniteEnseignements, 'credit_moyenne')) / $credEu;
+                                                                    if (!is_null($noteRepechage) && $moyEu >= $noteRepechage && $moyEu < 10) {
+                                                                        $moyEu = 10;
+                                                                    }
                                                                     $moyEu = $bulletinService->nombreFormatDeuxDecimal($moyEu);
                                                                     $resultEu = $bulletinService->mention($moyEu);
                                                                 @endphp

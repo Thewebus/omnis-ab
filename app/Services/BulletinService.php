@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as SupportCollection;
 
 class BulletinService {
-    public function nombreFormatDeuxDecimal(string $nombre) {
+    public function nombreFormatDeuxDecimal(string|null $nombre) {
         $nombreFormate = number_format($nombre, 2, ',', '');
         $nombreFormate = str_pad($nombreFormate, 5, '0', STR_PAD_LEFT);
         return $nombreFormate;
@@ -261,6 +261,7 @@ class BulletinService {
                                 'credit' => $matiere->credit,
                                 'credit_moyenne' => $matiere->credit * $moyenne,
                                 'moyenne' => $this->nombreFormatDeuxDecimal($moyenne),
+                                'note_repechage' => !is_null($note) ? $note->note_repechage : null,
                                 'moyCred' => !is_null($note) ? (!is_null($moyenne) ? ($moyenne * $matiere->credit) : 0) : 0,
                                 'resultat' => !is_null($note) ? (!is_null($moyenne) ? ($moyenne >= 10 ? 'Validée' : 'Non validée') : 'Non validée') : 'Non validée',
                                 'mention' => !is_null($note) ? $this->mention($moyenne) : $this->mention(0),
@@ -322,7 +323,6 @@ class BulletinService {
                 ]);
             }
         }
-
         return $bulletinDatas;
     }
 
@@ -508,6 +508,7 @@ class BulletinService {
                         'credit' => $matiere->credit,
                         'credit_moyenne' => $matiere->credit * $moyenne,
                         'moyenne' => $this->nombreFormatDeuxDecimal($moyenne),
+                        'note_repechage' => !is_null($note) ? $note->note_repechage : null,
                         'moyCred' => !is_null($note) ? (!is_null($moyenne) ? ($moyenne * $matiere->credit) : 0) : 0,
                         'resultat' => !is_null($note) ? (!is_null($moyenne) ? ($moyenne >= 10 ? 'Validée' : 'Non validée') : 'Non validée') : 'Non validée',
                         'mention' => !is_null($note) ? $this->mention($moyenne) : $this->mention(0),
@@ -1335,5 +1336,6 @@ class BulletinService {
 
         return [$entetes, $dataAllEtudiants, $entete4];
     }
+
 
 }

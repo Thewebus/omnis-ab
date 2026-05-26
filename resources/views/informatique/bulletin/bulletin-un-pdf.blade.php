@@ -317,6 +317,7 @@
         </div>
         @php
             $creditValides = 0;
+            $repechage = false;
         @endphp
         <div class="faculte">
             <h3>{{ $bulletinData['faculte'] }}</h3> 
@@ -340,7 +341,13 @@
                         @php
                             $rowspan = count($uniteEnseignements) - 1;
                             $credEu = array_sum(array_column($uniteEnseignements, 'credit'));
+                            $noteRepechage = max(array_column($uniteEnseignements, 'note_repechage'));
                             $moyEu = array_sum(array_column($uniteEnseignements, 'credit_moyenne')) / $credEu;
+                            if (!is_null($noteRepechage) && $moyEu >= $noteRepechage && $moyEu < 10) {
+                                $moyEu = 10;
+                                $repechage = true;
+                            }
+
                             $moyEu = $bulletinService->nombreFormatDeuxDecimal($moyEu);
                             $resultEu = $bulletinService->mention($moyEu);
                             $ueNom = str_replace(' ', '_', $uniteEnseignements['nom'])
@@ -366,7 +373,7 @@
                                 @php 
                                     $moyEu >= 10 ? $creditValides += $credEu : $creditValides += 0;
                                 @endphp
-                                <td rowspan="{{ $rowspan }}" class="small" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? 'VALIDEE' : 'NON VALIDEE' }}</td>
+                                <td rowspan="{{ $rowspan }}" class="small" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? ($repechage ? 'VALIDEE/REPECHÉ' : 'VALIDEE') : 'NON VALIDEE' }}</td>
                                 <td rowspan="{{ $rowspan }}" class="small">{{ $resultEu }}</td>
                                 <td rowspan="{{ $rowspan }}" style="width:8%" class="small">{{ $dataArray[$ueNom][0] }} {{ $dataArray[$ueNom][1] }}</td>
                             </tr>
