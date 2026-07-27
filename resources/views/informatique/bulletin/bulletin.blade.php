@@ -270,8 +270,10 @@
                                                                     $credEu = array_sum(array_column($uniteEnseignements, 'credit'));
                                                                     $noteRepechage = max(array_column($uniteEnseignements, 'note_repechage'));
                                                                     $moyEu = array_sum(array_column($uniteEnseignements, 'credit_moyenne')) / $credEu;
+                                                                    $repechage = false; // réinitialisé pour chaque UE
                                                                     if (!is_null($noteRepechage) && $moyEu >= $noteRepechage && $moyEu < 10) {
                                                                         $moyEu = 10;
+                                                                        $repechage = true;
                                                                     }
                                                                     $moyEu = $bulletinService->nombreFormatDeuxDecimal($moyEu);
                                                                     $resultEu = $bulletinService->mention($moyEu);
@@ -297,7 +299,7 @@
                                                                         @php 
                                                                             $moyEu >= 10 ? $creditValides += $credEu : $creditValides += 0;
                                                                         @endphp
-                                                                        <td rowspan="{{ $rowspan }}" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? 'VALIDEE' : 'NON VALIDEE' }}</td>
+                                                                        <td rowspan="{{ $rowspan }}" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? ($repechage ? 'VALIDEE/REPECHÉ' : 'VALIDEE') : 'NON VALIDEE' }}</td>
                                                                         <td rowspan="{{ $rowspan }}">{{ $resultEu }}</td>
                                                                         <td rowspan="{{ $rowspan }}">
                                                                             <div class="row">

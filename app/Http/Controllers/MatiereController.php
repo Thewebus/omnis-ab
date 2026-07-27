@@ -54,8 +54,8 @@ class MatiereController extends Controller
             'numero_ordre' => 'required|integer',
             'nom' => 'required|string',
             'semestre' => 'required|in:1,2',
-            'coefficient' => 'required|integer',
-            'credit' => 'required|integer',
+            'coefficient' => 'required|numeric|min:0',
+            'credit' => 'required|numeric|min:0',
             'volume_horaire' => 'required|integer',
             'description' => 'nullable|string',
         ]);
@@ -143,8 +143,8 @@ class MatiereController extends Controller
             'numero_ordre' => 'required|integer',
             'nom' => 'required|string',
             'semestre' => 'required|in:1,2',
-            'coefficient' => 'required|integer',
-            'credit' => 'required|integer',
+            'coefficient' => 'required|numeric|min:0',
+            'credit' => 'required|numeric|min:0',
             'volume_horaire' => 'required|integer',
             'description' => 'nullable|string',
         ]);

@@ -12,6 +12,11 @@ class Matiere extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'credit' => 'float',
+        'coefficient' => 'float',
+    ];
+
     public function professeurs() {
         return $this->belongsToMany(Professeur::class)->withPivot('volume_horaire', 'progression', 'statut', 'classe_id', 'annee_academique_id')->withTimestamps();
     }

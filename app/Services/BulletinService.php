@@ -94,7 +94,7 @@ class BulletinService {
     // }
 
     private function moyenneSemestre1(Classe $classe, $anneeAcademiqueId, $etudiantId, $session) {
-        $sommeMoyenne = 0;
+        $moyCreds = 0;
         $nbrMatiere = 0;
         $creditsValidee = 0;
         $totalCredits = 0;
@@ -105,34 +105,26 @@ class BulletinService {
                 ->where('classe_id', $classe->id)
                 ->where('user_id', $etudiantId)
                 ->first();
-            
-            if($session == 1) {
-                // $sommeMoyenne += !is_null($note) ? ($note->partiel_session_1 < 10 || $note->partiel_session_1 == "NONE" || $note->moyenne < 10 ? $note->partiel_session_2 : $note->moyenne) : 0;
-                $sommeMoyenne += !is_null($note) ? $note->moyenne : 0;
-                // $creditsValidee += !is_null($note) ? (($note->moyenne < 10 && (is_null($note->partiel_session_2) || $note->partiel_session_2 < 10)) ? 0 : $matiere->credit) : 0;
-                $creditsValidee += !is_null($note) ? ($note->moyenne >= 10 ? $matiere->credit : 0) : 0;
-                $nbrMatiere++;
-                $totalCredits += $matiere->credit;
-            }
-            else {
-                if ($note && $note->moyenne < 10) {
 
-                    $sommeMoyenne += !is_null($note) ? $note->partiel_session_2 : 0;
-                    $creditsValidee += !is_null($note) ? ($note->partiel_session_2 >= 10 ? $matiere->credit : 0) : 0;
-                    $nbrMatiere++;
-                    $totalCredits += $matiere->credit;
-                    // $moyenne = $note->partiel_session_2 ?? 0;
+            // Moyenne de la matière retenue (session 2 : partiel_session_2 pour les matières échouées)
+            if($session == 1) {
+                $moyenne = !is_null($note) ? $note->moyenne : 0;
+            } else {
+                if ($note && $note->moyenne < 10) {
+                    $moyenne = !is_null($note) ? $note->partiel_session_2 : 0;
                 } else {
-                    $sommeMoyenne += !is_null($note) ? $note->moyenne : 0;
-                    $creditsValidee += !is_null($note) ? ($note->moyenne >= 10 ? $matiere->credit : 0) : 0;
-                    $nbrMatiere++;
-                    $totalCredits += $matiere->credit;
+                    $moyenne = !is_null($note) ? $note->moyenne : 0;
                 }
             }
 
+            $moyCreds += $moyenne * $matiere->credit;
+            $creditsValidee += (!is_null($note) && $moyenne >= 10) ? $matiere->credit : 0;
+            $nbrMatiere++;
+            $totalCredits += $matiere->credit;
         }
 
-        $moyenneFinaleSemestre1 = $sommeMoyenne / $nbrMatiere;
+        // Moyenne du semestre pondérée par les crédits : Σ(moyenne × crédit) / Σ crédits
+        $moyenneFinaleSemestre1 = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
         return [$moyenneFinaleSemestre1, $creditsValidee, $totalCredits];
     }
 
@@ -315,7 +307,7 @@ class BulletinService {
                     count($uniteEnseignementCourante) > 1 ? array_push($ues, $uniteEnseignementCourante) : '';
                 }
     
-                $moyennFinale = $nbrMatiere !== 0 ? $sommeMoyenee / $nbrMatiere : 0;
+                $moyennFinale = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
                 if($semestre == 2) {
                     $dataSemestre1 = $this->moyenneSemestre1($classe, $anneeAcademique->id, $etudiant->id, $session);
                     $moyenneFinaleSemestre1 = $dataSemestre1[0];
@@ -433,7 +425,7 @@ class BulletinService {
                     count($uniteEnseignementCourante) > 1 ? array_push($ues, $uniteEnseignementCourante) : '';
                 }
     
-                $moyennFinale = $nbrMatiere !== 0 ? $sommeMoyenee / $nbrMatiere : 0;
+                $moyennFinale = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
                 if($semestre == 2) {
                     $dataSemestre1 = $this->moyenneSemestre1($classe, $anneeAcademique->id, $etudiant->id, $session);
                     $moyenneFinaleSemestre1 = $dataSemestre1[0];
@@ -561,7 +553,7 @@ class BulletinService {
             count($uniteEnseignementCourante) > 1 ? array_push($ues, $uniteEnseignementCourante) : '';
         }
 
-        $moyennFinale = $sommeMoyenne / $nbrMatiere;
+        $moyennFinale = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
         if($semestre == 2) {
             $dataSemestre1 = $this->moyenneSemestre1($classe, $anneeAcademique->id, $etudiant->id, $session);
             $moyenneFinaleSemestre1 = $dataSemestre1[0];
@@ -683,7 +675,7 @@ class BulletinService {
             count($uniteEnseignementCourante) > 1 ? array_push($ues, $uniteEnseignementCourante) : '';
         }
 
-        $moyennFinale = $sommeMoyenne / $nbrMatiere;
+        $moyennFinale = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
         if($semestre == 2) {
             $dataSemestre1 = $this->moyenneSemestre1($classe, $anneeAcademique->id, $etudiant->id, $session);
             $moyenneFinaleSemestre1 = $dataSemestre1[0];

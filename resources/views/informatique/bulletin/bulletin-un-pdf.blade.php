@@ -339,6 +339,7 @@
                 @if (count($uniteEnseignements) > 1)
                     @foreach ($uniteEnseignements as $uniteEnseignement)
                         @php
+                            $repechage = false; // réinitialisé pour chaque UE : le flag ne doit pas fuiter d'une UE repêchée vers les suivantes
                             $rowspan = count($uniteEnseignements) - 1;
                             $credEu = array_sum(array_column($uniteEnseignements, 'credit'));
                             $noteRepechage = max(array_column($uniteEnseignements, 'note_repechage'));

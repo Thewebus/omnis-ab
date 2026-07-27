@@ -118,7 +118,7 @@
                                 <div class="mb-3 row">
                                     <label class="col-sm-3 col-form-label">Coefficient</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control @error('coefficient') is-invalid @enderror" type="number" name="coefficient" value="{{ old("coefficient") ?? $matiere->coefficient }}" placeholder="Coefficient matière" />
+                                        <input class="form-control @error('coefficient') is-invalid @enderror" type="number" step="0.5" min="0" name="coefficient" value="{{ old("coefficient") ?? $matiere->coefficient }}" placeholder="Coefficient matière" />
                                         @error('coefficient')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -129,7 +129,7 @@
                                 <div class="mb-3 row">
                                     <label class="col-sm-3 col-form-label">Credit</label>
                                     <div class="col-sm-9">
-                                        <input class="form-control @error('credit') is-invalid @enderror" type="number" name="credit" value="{{ old("credit") ?? $matiere->credit }}" placeholder="credit matière" />
+                                        <input class="form-control @error('credit') is-invalid @enderror" type="number" step="0.5" min="0" name="credit" value="{{ old("credit") ?? $matiere->credit }}" placeholder="credit matière" />
                                         @error('credit')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
