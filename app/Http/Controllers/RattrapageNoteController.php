@@ -11,7 +11,14 @@ class RattrapageNoteController extends Controller
 {
 
     public function index() {
-        $rattrapages = RattrapageNote::join('users', 'rattrapage_notes.user_id', '=', 'users.id')
+        // Les matières/classes peuvent être soft-deleted (changement de maquette) : on les charge
+        // avec withTrashed() pour que les notes de rattrapage restent visibles.
+        $rattrapages = RattrapageNote::with([
+                'etudiant' => fn ($q) => $q->withTrashed(),
+                'matiere' => fn ($q) => $q->withTrashed(),
+                'matiere.classe' => fn ($q) => $q->withTrashed(),
+            ])
+            ->join('users', 'rattrapage_notes.user_id', '=', 'users.id')
             ->orderBy('users.fullname', 'asc')
             ->select('rattrapage_notes.*')
             ->get();

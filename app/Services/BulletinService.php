@@ -54,7 +54,7 @@ class BulletinService {
     
                         if(!is_null($note)) {
                             // if($note->partiel_session_1 < 10 || $note->partiel_session_1 == "NONE" || $note->moyenne < 10);
-                            if($note->moyenne < 10);
+                            if($note->moyenne < 10)
                                 {$listeEtudiants->push($etudiant); break;}
                         }
                         else {$listeEtudiants->push($etudiant); break;}
@@ -208,6 +208,42 @@ class BulletinService {
         return collect($moyEu);
     }
 
+    /**
+     * Validation d'un semestre par UE (cohérente avec l'affichage des bulletins).
+     * Reproduit exactement le calcul des vues : moyenne UE pondérée par crédits + repêchage
+     * (seuil = max des note_repechage de l'UE). Retourne [créditsValidés, totalCrédits, toutesUeValidées].
+     */
+    private function validationUe(array $ues): array {
+        $creditsValides = 0;
+        $totalCredits = 0;
+        $toutesValidees = true;
+
+        foreach ($ues as $ue) {
+            $credits = array_column($ue, 'credit');
+            $credEu = array_sum($credits);
+            if ($credEu == 0) {
+                continue;
+            }
+
+            $moyEu = array_sum(array_column($ue, 'credit_moyenne')) / $credEu;
+            $repechages = array_column($ue, 'note_repechage');
+            $noteRepechage = count($repechages) ? max($repechages) : null;
+            if (!is_null($noteRepechage) && $moyEu >= $noteRepechage && $moyEu < 10) {
+                $moyEu = 10;
+            }
+            $moyEu = $this->nombreFormatDeuxDecimal($moyEu);
+
+            $totalCredits += $credEu;
+            if ($moyEu >= 10) {
+                $creditsValides += $credEu;
+            } else {
+                $toutesValidees = false;
+            }
+        }
+
+        return [$creditsValides, $totalCredits, $toutesValidees];
+    }
+
     public function bulletinClasse($classe, $semestre, $session) {
         $classe = Classe::findOrFail($classe);
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
@@ -305,7 +341,7 @@ class BulletinService {
                     'unite_enseignements' => $ues,
                     'moyenne_semestre' => $totalCredits,
                     'total_coefficient' => $totalCoefficients,
-                    'resultat_final' => $totalCreditValidee == $totalCredits ? 'Semestre Validée ' : 'Semestre non Validé',
+                    'resultat_final' => $this->validationUe($ues)[2] ? 'Semestre Validé' : 'Semestre non Validé',
                     'mention_finale' => $this->mention($moyennFinale),
                     'moyenne_finale' => $moyennFinale,
                     'moyenne_semestre_1' => $semestre == 2 ? $moyenneFinaleSemestre1 : '',
@@ -313,7 +349,7 @@ class BulletinService {
                     'total_credits_semestre_1' => $semestre == 2 ? $TotalCreditsSemestre1 : '',
                     'resultat_semestre_1' => $semestre == 2 ? ($creditValideesSemestre1 == $TotalCreditsSemestre1 ? 'Semestre validé' : 'Semestre Non validé') : '',
                     'moyenne_annelle' => $semestre == 2 ? $moyenneAnnuelle : 0,
-                    'total_credit_validee' => $totalCreditValidee,
+                    'total_credit_validee' => $this->validationUe($ues)[0],
                     'total_credit' => $totalCredits,
                     'etudiant_id' => $etudiant->id,
                     'identifiant_bulletin' => $etudiant->identifiant_bulletin . '/R/SG/INFO',
@@ -421,7 +457,7 @@ class BulletinService {
                     'unite_enseignements' => $ues,
                     'moyenne_semestre' => $totalCredits,
                     'total_coefficient' => $totalCoefficients,
-                    'resultat_final' => $totalCreditValidee == $totalCredits ? 'Semestre Validée ' : 'Semestre non Validé',
+                    'resultat_final' => $this->validationUe($ues)[2] ? 'Semestre Validé' : 'Semestre non Validé',
                     'mention_finale' => $this->mention($moyennFinale),
                     'moyenne_finale' => $moyennFinale,
                     'moyenne_semestre_1' => $semestre == 2 ? $moyenneFinaleSemestre1 : '',
@@ -429,7 +465,7 @@ class BulletinService {
                     'total_credits_semestre_1' => $semestre == 2 ? $TotalCreditsSemestre1 : '',
                     'resultat_semestre_1' => $semestre == 2 ? ($creditValideesSemestre1 == $TotalCreditsSemestre1 ? 'Semestre validé' : 'Semestre Non validé') : '',
                     'moyenne_annelle' => $semestre == 2 ? $moyenneAnnuelle : '',
-                    'total_credit_validee' => $totalCreditValidee,
+                    'total_credit_validee' => $this->validationUe($ues)[0],
                     'total_credit' => $totalCredits,
                     'etudiant_id' => $etudiant->id,
                     'identifiant_bulletin' => $etudiant->identifiant_bulletin . '/R/SG/INFO',
@@ -549,7 +585,7 @@ class BulletinService {
             'unite_enseignements' => $ues,
             'moyenne_semestre' => $totalCredits,
             'total_coefficient' => $totalCoefficients,
-            'resultat_final' => $totalCreditValidee == $totalCredits ? 'Semestre Validé' : 'Semestre non Validé',
+            'resultat_final' => $this->validationUe($ues)[2] ? 'Semestre Validé' : 'Semestre non Validé',
             'mention_finale' => $this->mention($moyennFinale),
             'moyenne_finale' => $moyennFinale,
             'moyenne_semestre_1' => $semestre == 2 ? $moyenneFinaleSemestre1 : '',
@@ -557,7 +593,7 @@ class BulletinService {
             'total_credits_semestre_1' => $semestre == 2 ? $TotalCreditsSemestre1 : '',
             'resultat_semestre_1' => $semestre == 2 ? ($creditValideesSemestre1 == $TotalCreditsSemestre1 ? 'Semestre validé' : 'Semestre Non validé') : '',
             'moyenne_annelle' => $semestre == 2 ? $moyenneAnnuelle : 0,
-            'total_credit_validee' => $totalCreditValidee,
+            'total_credit_validee' => $this->validationUe($ues)[0],
             'total_credit' => $totalCredits,
             'etudiant_id' => $etudiant->id,
             'identifiant_bulletin' => $etudiant->identifiant_bulletin . '/R/SG/INFO',
@@ -669,7 +705,7 @@ class BulletinService {
             'unite_enseignements' => $ues,
             'moyenne_semestre' => $totalCredits,
             'total_coefficient' => $totalCoefficients,
-            'resultat_final' => $totalCreditValidee == $totalCredits ? 'Semestre Validé' : 'Semestre non Validé',
+            'resultat_final' => $this->validationUe($ues)[2] ? 'Semestre Validé' : 'Semestre non Validé',
             'mention_finale' => $this->mention($moyennFinale),
             'moyenne_finale' => $moyennFinale,
             'moyenne_semestre_1' => $semestre == 2 ? $moyenneFinaleSemestre1 : '',
@@ -677,7 +713,7 @@ class BulletinService {
             'total_credits_semestre_1' => $semestre == 2 ? $TotalCreditsSemestre1 : '',
             'resultat_semestre_1' => $semestre == 2 ? ($creditValideesSemestre1 == $TotalCreditsSemestre1 ? 'Semestre validé' : 'Semestre Non validé') : '',
             'moyenne_annelle' => $semestre == 2 ? $moyenneAnnuelle : '',
-            'total_credit_validee' => $totalCreditValidee,
+            'total_credit_validee' => $this->validationUe($ues)[0],
             'total_credit' => $totalCredits,
             'etudiant_id' => $etudiant->id,
             'identifiant_bulletin' => $etudiant->identifiant_bulletin . '/R/SG/INFO',

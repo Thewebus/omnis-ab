@@ -306,10 +306,10 @@
                                                                                         <option value="Janvier">Janvier</option>
                                                                                         <option value="Fevrier">Fevrier</option>
                                                                                         <option value="Mars">Mars</option>
-                                                                                        <option selected="Avril" value="Avril">Avril</option>
-                                                                                        <option value="Mai">Mai</option>
+                                                                                        <option value="Avril">Avril</option>
+                                                                                        <option value="Mai" {{ $semestre == 1 ? 'selected' : '' }}>Mai</option>
                                                                                         <option value="Juin">Juin</option>
-                                                                                        <option value="Juillet">Juillet</option>
+                                                                                        <option value="Juillet" {{ $semestre == 2 ? 'selected' : '' }}>Juillet</option>
                                                                                         <option value="Aout">Aout</option>
                                                                                         <option value="Septembre">Septembre</option>
                                                                                         <option value="Octobre">Octobre</option>
@@ -319,12 +319,12 @@
                                                                                 </div>
                                                                                 <div class="col-md-6">
                                                                                     <select class="form-select" name="{{ $uniteEnseignements['nom'] }}[]" id="" required="">
-                                                                                        <option value="2022">2022</option>
-                                                                                        <option selected="2023" value="2023">2023</option>
-                                                                                        <option  value="2024">2024</option>
-                                                                                        <option  value="2025">2025</option>
-                                                                                        <option  value="2026">2026</option>
-                                                                                        <option  value="2027">2027</option>
+                                                                                        <option value="2022" {{ $anneeAcademique->fin == '2022' ? 'selected' : '' }}>2022</option>
+                                                                                        <option value="2023" {{ $anneeAcademique->fin == '2023' ? 'selected' : '' }}>2023</option>
+                                                                                        <option value="2024" {{ $anneeAcademique->fin == '2024' ? 'selected' : '' }}>2024</option>
+                                                                                        <option value="2025" {{ $anneeAcademique->fin == '2025' ? 'selected' : '' }}>2025</option>
+                                                                                        <option value="2026" {{ $anneeAcademique->fin == '2026' ? 'selected' : '' }}>2026</option>
+                                                                                        <option value="2027" {{ $anneeAcademique->fin == '2027' ? 'selected' : '' }}>2027</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
