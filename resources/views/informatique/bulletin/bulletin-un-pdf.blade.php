@@ -7,7 +7,7 @@
     <style>
         body {
             font-size: 0.8rem;
-            text-transform: uppercase;
+            /* text-transform: uppercase; */
         }
         .bloc-header .annee-session .titre{
             display: inline-block;
@@ -359,7 +359,7 @@
                         @if ($loop->index == 0)
                             <tr class="text-center align-middle">
                                 <td class="background-tab">UE</td>
-                                <td style="width:30%" class="background-tab">{{ $uniteEnseignement }}</td>
+                                <td style="width:30%" class="background-tab">{{ mb_convert_case(mb_strtolower($uniteEnseignement, 'UTF-8'), MB_CASE_TITLE, 'UTF-8') }}</td>
                                 <td class="background-tab">MOY.ECUE</td>
                                 <td class="background-tab">MOY.UE</td>
                                 <td class="background-tab">CRED.UE</td>
@@ -370,20 +370,20 @@
                         @elseif ($loop->index == 1)
                             <tr class="text-center align-middle">
                                 <td rowspan="{{ $rowspan }}">ECUE</td>
-                                <td>{{ $uniteEnseignement['matiere'] }}</td>
+                                <td>{{ mb_convert_case(mb_strtolower($uniteEnseignement['matiere'], 'UTF-8'), MB_CASE_TITLE, 'UTF-8') }}</td>
                                 <td>{{ $uniteEnseignement['moyenne'] }}</td>
                                 <td rowspan="{{ $rowspan }}" style="background-color: rgb(186, 186, 186);">{{ $moyEu }}</td>
                                 <td rowspan="{{ $rowspan }}">{{ $credEu }}</td>
                                 @php 
                                     $moyEu >= 10 ? $creditValides += $credEu : $creditValides += 0;
                                 @endphp
-                                <td rowspan="{{ $rowspan }}" class="small" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? ($repechage ? 'VALIDEE/REPECHÉ' : 'VALIDEE') : 'NON VALIDEE' }}</td>
+                                <td rowspan="{{ $rowspan }}" class="small" style="background-color: rgb(186, 186, 186);">{{ $moyEu >= 10 ? ($repechage ? 'Validée/Repeché' : 'Validée') : 'Non Validée' }}</td>
                                 <td rowspan="{{ $rowspan }}" class="small">{{ $resultEu }}</td>
                                 <td rowspan="{{ $rowspan }}" style="width:8%" class="small">{{ $dataArray[$ueNom][0] }} {{ $dataArray[$ueNom][1] }}</td>
                             </tr>
                         @else
                             <tr class="text-center align-middle">
-                                <td>{{ $uniteEnseignement['matiere'] }}</td>
+                                <td>{{ mb_convert_case(mb_strtolower($uniteEnseignement['matiere'], 'UTF-8'), MB_CASE_TITLE, 'UTF-8') }}</td>
                                 <td>{{ $uniteEnseignement['moyenne'] }}</td>
                             </tr>
                         @endif
