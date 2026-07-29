@@ -6,7 +6,8 @@
     <title>Bulletin étudiant</title>
     <style>
         body {
-            font-size: 0.8rem
+            font-size: 0.8rem;
+            text-transform: uppercase;
         }
         .bloc-header .annee-session .titre{
             display: inline-block;
@@ -74,7 +75,7 @@
             width: 100%;
             margin-top: 20px;
             margin-bottom: 0px;
-            border: 1px solid #e6edef;
+            /* border: 1px solid #e6edef; */
             border-radius: 0.5rem;
             /* vertical-align: top; */
             font-size: 0.9rem;
@@ -86,6 +87,7 @@
 		tr,td {
             /* padding:0.2em; */
             border-bottom: 1px solid #222;
+            /* font-size: 0.7rem; */
             /* text-align: center; */
         }
         .text-center {
@@ -103,7 +105,8 @@
             font-size: 0.8em;
             width: 100%;
             position: fixed;
-            bottom: 0;
+            bottom: -2rem;
+            margin-top: 10rem;
         }
         .avis-important {
             background-color: rgb(186, 186, 186);
@@ -415,20 +418,27 @@
                 </tr>
             @endif
             <tr>
-                <td colspan="8" style="padding-bottom: 3em">
-                    <p>
-                        Fait à @if(env('OWNER') == 'ua_abidjan') Abidjan,
+                <td colspan="8" style="padding-bottom: 3em; border: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <p style="margin-top: 1rem;">
+                            Fait à
+                            @if(env('OWNER') == 'ua_abidjan') Abidjan,
                             @elseif(env('OWNER') == 'ua_bouake') Bouaké,
                             @elseif(env('OWNER') == 'ua_bassam') Grand-Bassam,
                             @elseif(env('OWNER') == 'ua_sp') San-Pedro,
-                            @endif le {{ date('d/m/Y') }} <br>
-                    </p>
-                    <p style="margin-left: 25rem; margin-top: -2rem; text-decoration: underline;">
-                        {{ $signataire->fonction ?? 'Le Président du Conseil Scientifique' }}
-                    </p>
-                    <p style="margin-left: 25rem; margin-top:4rem; font-weight: bold;">
-                        {{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}
-                    </p>
+                            @endif
+                            le {{ date('d/m/Y') }}
+                        </p>
+
+                        <div style="text-align: center; margin-right:2rem; width: 20rem; margin-left:23rem">
+                            <p style="margin-bottom: 5rem; margin-top:-1rem; text-decoration: underline;">
+                                {{ $signataire->fonction ?? 'Le Président du Conseil Scientifique' }}
+                            </p>
+                            <p style="margin: 0; font-weight: bold;">
+                                {{ $signataire->fullname ?? 'Prof. HAUHOUOT Asseypo Antoine' }}
+                            </p>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </table>

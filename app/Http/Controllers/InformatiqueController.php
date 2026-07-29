@@ -960,7 +960,7 @@ class InformatiqueController extends Controller
         $bulletinData = $anneeAcademique->id == 1 ? (new BulletinService)->bulletinEtudiantOld($id, $request->semestre, $request->session) : (new BulletinService)->bulletinEtudiant($id, $request->semestre, $request->session);
         $bulletin = PDF::loadView($view, compact('bulletinData', 'signataire', 'dataArray', 'anneeAcademique'));
         return $bulletin->stream();
-        // return view('informatique.bulletin.bulletin-un-pdf', compact('bulletinData'));
+        // return view('informatique.bulletin.bulletin-un-pdf', compact('bulletinData', 'signataire', 'dataArray', 'anneeAcademique'));
     }
 
     public function allBulletinDownload(Request $request, $id) {
