@@ -94,38 +94,17 @@ class BulletinService {
     // }
 
     private function moyenneSemestre1(Classe $classe, $anneeAcademiqueId, $etudiantId, $session) {
-        $moyCreds = 0;
-        $nbrMatiere = 0;
-        $creditsValidee = 0;
-        $totalCredits = 0;
+        // Source unique de vérité : le récap Semestre 1 du bulletin annuel réutilise EXACTEMENT le
+        // calcul du bulletin de semestre 1, avec la MÊME session que le bulletin annuel (S2 session 2).
+        // On garantit ainsi une moyenne pondérée, des crédits par UE (compensation + repêchage) et une
+        // prise en compte du rattrapage (session 2) strictement identiques au bulletin de semestre 1.
+        $bulletinS1 = $this->bulletinEtudiant($etudiantId, 1, $session);
 
-        foreach($classe->matieres->where('semestre', 1) as $matiere) {
-            $note = Note::where('annee_academique_id', $anneeAcademiqueId)
-                ->where('matiere_id', $matiere->id)
-                ->where('classe_id', $classe->id)
-                ->where('user_id', $etudiantId)
-                ->first();
-
-            // Moyenne de la matière retenue (session 2 : partiel_session_2 pour les matières échouées)
-            if($session == 1) {
-                $moyenne = !is_null($note) ? $note->moyenne : 0;
-            } else {
-                if ($note && $note->moyenne < 10) {
-                    $moyenne = !is_null($note) ? $note->partiel_session_2 : 0;
-                } else {
-                    $moyenne = !is_null($note) ? $note->moyenne : 0;
-                }
-            }
-
-            $moyCreds += $moyenne * $matiere->credit;
-            $creditsValidee += (!is_null($note) && $moyenne >= 10) ? $matiere->credit : 0;
-            $nbrMatiere++;
-            $totalCredits += $matiere->credit;
-        }
-
-        // Moyenne du semestre pondérée par les crédits : Σ(moyenne × crédit) / Σ crédits
-        $moyenneFinaleSemestre1 = $totalCredits != 0 ? $moyCreds / $totalCredits : 0;
-        return [$moyenneFinaleSemestre1, $creditsValidee, $totalCredits];
+        return [
+            $bulletinS1['moyenne_finale'],
+            $bulletinS1['total_credit_validee'],
+            $bulletinS1['total_credit'],
+        ];
     }
 
     public function classementMoyenne(array $array, float $moyenne)
@@ -236,6 +215,73 @@ class BulletinService {
         return [$creditsValides, $totalCredits, $toutesValidees];
     }
 
+    /**
+     * Une UE est validée pour un étudiant si sa moyenne (pondérée par crédits) >= 10,
+     * ou si elle est repêchée : note_repechage <= moyenne_UE < 10.
+     * Avant délibération (pas de note_repechage), une UE est validée uniquement si moyenne_UE >= 10.
+     */
+    public function ueEstValidee($classeId, $ueId, $etudiantId, $session = 1): bool {
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+        $matieres = Matiere::where('classe_id', $classeId)->where('unite_enseignement_id', $ueId)->get();
+
+        $moyCred = 0;
+        $totalCred = 0;
+        $noteRepechage = null;
+
+        foreach ($matieres as $matiere) {
+            $note = Note::where('annee_academique_id', $anneeAcademique->id)
+                ->where('classe_id', $classeId)
+                ->where('matiere_id', $matiere->id)
+                ->where('user_id', $etudiantId)
+                ->first();
+
+            $moyenne = $note ? ($note->moyenne ?? 0) : 0;
+            $moyCred += $moyenne * $matiere->credit;
+            $totalCred += $matiere->credit;
+
+            if ($note && !is_null($note->note_repechage)) {
+                $noteRepechage = max($noteRepechage, $note->note_repechage);
+            }
+        }
+
+        if ($totalCred == 0) {
+            return true; // UE sans matière : rien à repasser
+        }
+
+        $moyenneUe = $moyCred / $totalCred;
+
+        if ($moyenneUe >= 10) {
+            return true;
+        }
+
+        // Repêchage
+        return !is_null($noteRepechage) && $moyenneUe >= $noteRepechage;
+    }
+
+    /**
+     * Matières d'une UE qu'un étudiant doit repasser en session 2 :
+     * uniquement si l'UE n'est PAS validée, et seulement les matières où il est < 10.
+     * Retourne une collection de Matiere (vide si l'UE est validée).
+     */
+    public function matieresARepasser($classeId, $ueId, $etudiantId, $session = 1) {
+        if ($this->ueEstValidee($classeId, $ueId, $etudiantId, $session)) {
+            return collect();
+        }
+
+        $anneeAcademique = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
+
+        return Matiere::where('classe_id', $classeId)->where('unite_enseignement_id', $ueId)->get()
+            ->filter(function ($matiere) use ($anneeAcademique, $classeId, $etudiantId) {
+                $note = Note::where('annee_academique_id', $anneeAcademique->id)
+                    ->where('classe_id', $classeId)
+                    ->where('matiere_id', $matiere->id)
+                    ->where('user_id', $etudiantId)
+                    ->first();
+                $moyenne = $note ? ($note->moyenne ?? 0) : 0;
+                return $moyenne < 10;
+            })->values();
+    }
+
     public function bulletinClasse($classe, $semestre, $session) {
         $classe = Classe::findOrFail($classe);
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
@@ -277,7 +323,7 @@ class BulletinService {
                                 $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                             } else {
                                 if ($note && $note->moyenne < 10) {
-                                    $moyenne = $note->partiel_session_2 ?? 0;
+                                    $moyenne = $note->partiel_session_2 ?? $note->moyenne;
                                 } else {
                                     $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                                 }
@@ -395,7 +441,7 @@ class BulletinService {
                                 $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                             } else {
                                 if ($note && $note->moyenne < 10) {
-                                    $moyenne = $note->partiel_session_2 ?? 0;
+                                    $moyenne = $note->partiel_session_2 ?? $note->moyenne;
                                 } else {
                                     $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                                 }
@@ -524,7 +570,7 @@ class BulletinService {
                     } else {
                         // if ($note && ($note->partiel_session_1 < 10 || $note->partiel_session_1 == "NONE" || $note->moyenne < 10)) {
                         if ($note && $note->moyenne < 10) {
-                            $moyenne = $note->partiel_session_2 ?? 0;
+                            $moyenne = $note->partiel_session_2 ?? $note->moyenne;
                         } else {
                             $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                         }
@@ -647,7 +693,7 @@ class BulletinService {
                     } else {
                         // if ($note && ($note->partiel_session_1 < 10 || $note->partiel_session_1 == "NONE" || $note->moyenne < 10)) {
                         if ($note && $note->moyenne < 10) {
-                            $moyenne = $note->partiel_session_2 ?? 0;
+                            $moyenne = $note->partiel_session_2 ?? $note->moyenne;
                         } else {
                             $moyenne = $note ? ($note->moyenne ?? 0) : 0;
                         }

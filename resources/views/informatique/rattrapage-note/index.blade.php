@@ -37,7 +37,7 @@
 	                                    <th>Matière</th>
 	                                    <th>classe</th>
 	                                    <th>Note</th>
-										@if (Auth::user()->email == "v.bourgou2@gmail.com" || Auth::user()->email == "youssouf.sidick.ys@outlook.com")
+										@if (Gate::allows('gerer-rattrapage'))
 	                                    	<th>Actions</th>
 										@endif
 	                                </tr>
@@ -51,7 +51,7 @@
 												<td>{{ $rattrapage->matiere->nom }}</td>	                                    
 												<td>{{ $rattrapage->matiere->classe?->nom }}</td>	                                    
 												<td>{{ $rattrapage->note }}</td>
-												@if (Auth::user()->email == "v.bourgou2@gmail.com" || Auth::user()->email == "youssouf.sidick.ys@outlook.com")											
+												@if (Gate::allows('gerer-rattrapage'))											
 													<td style="width: 5vw">
 														<a href="{{ route('admin.rattrapage.modification', $rattrapage->id) }}"><button class="btn btn-primary"><i class="fa fa-edit"></i></button></a>
 		

@@ -7,7 +7,7 @@
                 <tr>
                     <th>N°</th>
                     <th>
-                        {{ $annee->id == 1 ? 'Matières' : 'Unité d\'enseignement' }}
+                        {{ $annee->id == 1 ? 'Matières' : 'UE' }}
                         
                     </th>
                     <th>Action</th>
@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 @if ($matieres->count() !== 0 || count($ues) !== 0)
-                    @if ($annee->id > 1 && ($action == 'deliberation' || $action == 'deliberation-session-2'))
+                    @if ($annee->id > 1 && ($action == 'deliberation' || $action == 'deliberation-session-2' || $action == 'session2'))
                         @foreach ($ues as $ue)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
@@ -28,6 +28,8 @@
                                         <button class="btn btn-primary" type="button" wire:click="repechageStat({{ $ue }})"><i class="fa fa-eye"></i></button>
                                     @elseif ($action == 'deliberation-session-2')
                                         <button class="btn btn-primary" type="button" wire:click="deliberationSession2({{ $ue }})"><i class="fa fa-eye"></i></button>
+                                    @elseif ($action == 'session2')
+                                        <button class="btn btn-primary" type="button" wire:click="noteSession2({{ $ue }})"><i class="fa fa-eye"></i></button>
                                     @else
                                         <button class="btn btn-danger" type="button">Something gone wrong</button>
                                     @endif

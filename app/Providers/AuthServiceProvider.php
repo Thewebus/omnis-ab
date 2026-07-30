@@ -25,6 +25,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // Droit de gérer (modifier / supprimer) les notes de rattrapage.
+        // Liste des gestionnaires définie dans config/permissions.php (via RATTRAPAGE_MANAGERS).
+        Gate::define('gerer-rattrapage', function ($user) {
+            return in_array($user->email ?? null, config('permissions.rattrapage_managers', []), true);
+        });
     }
 }

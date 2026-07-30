@@ -68,7 +68,7 @@
         }
         .information-etudiant {
             margin-top: 10px;
-            font-size: 0.8rem
+            font-size: 0.7rem
 
         }
         table {
@@ -328,13 +328,15 @@
         <div class="releve-note">
             <h3>RELEVE DE NOTES</h3> 
         </div>
-        <div class="information">
+        <div class="information" style="margin-bottom: 1rem;">
             <div class="information-etudiant">
-                <span style="float: right; font-size:1rem"> <strong>Session {{ $bulletinData['session'] == 1 ? '1' : '2' }} / Semestre {{ $bulletinData['semestre'] == 1 ? '1' : '2' }}</strong></span>
+                <span style="float: right;"> <strong>Session {{ $bulletinData['session'] == 1 ? '1' : '2' }} / Semestre {{ $bulletinData['semestre'] == 1 ? '1' : '2' }}</strong></span>
                 ETUDIANT(E) : <b> {{ $bulletinData['fullname'] }}</b> <br>
                 NÉ(E) LE: <b> {{ $bulletinData['dateNais'] }}</b> A: <strong>{{ $bulletinData['lieuNais'] }}</strong> <br>
-                CLASSE : <b>{{ $bulletinData['classe'] }}</b>
-                <span style="float: right; font-size:1rem"><strong>Matricule : {{ $bulletinData['matricule_etudiant'] }}</strong></span>
+                <div style="width: 80%">CLASSE : <b>{{ $bulletinData['classe'] }}</b></div> 
+                <div style="float: right">
+                    <span><strong>Matricule : {{ $bulletinData['matricule_etudiant'] }}</strong></span>
+                </div>
             </div>
         </div>
         <table class="ue-text">

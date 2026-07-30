@@ -638,18 +638,24 @@ class InformatiqueController extends Controller
     }
 
     public function listeEtudiantSession2($id) {
+        $matiereModel = Matiere::findOrFail($id);
+        $bulletinService = new BulletinService();
         $dataBrute = (new OtherDataService)->notesMatiere($id);
         $classe = $dataBrute[0];
         $matiere = $dataBrute[1];
 
-        $dataNotes = array_filter($dataBrute[2], function($data) {
-            return $data['decision_finale'] === 'ajourné';
+        // Doivent repasser : matière < 10 ET UE (de la matière) non validée après délibération.
+        $dataNotes = array_filter($dataBrute[2], function($data) use ($matiereModel, $bulletinService) {
+            $moyenne = is_numeric($data['moyenne']) ? $data['moyenne'] : 0;
+            if ($moyenne >= 10) {
+                return false;
+            }
+            return !$bulletinService->ueEstValidee($matiereModel->classe_id, $matiereModel->unite_enseignement_id, $data['nom_etudiant']->id);
         });
-        // dd($dataBrute);
+
         $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
         $liste = PDF::loadView('informatique.note.liste-ajournes-pdf', compact('classe', 'matiere', 'dataNotes', 'anneeAcademique'));
         return $liste->stream();
-        // return view('informatique.note.liste-ajournes-pdf', compact('classe', 'matiere', 'dataNotes'));
     }
     
     public function addNote($id) {
@@ -830,91 +836,6 @@ class InformatiqueController extends Controller
         flashy()->success('Suppression éffectué !');
         return redirect()->back();  
     }
-
-    public function postSession2(Request $request, $id) {
-        $this->validate($request, [
-            'systeme' => 'required|in:lmd,normal',
-        ]);
-
-        $anneeAcademique = getSelectedAnneeAcademique() ? getSelectedAnneeAcademique() : getLastAnneeAcademique();
-        $matiere = Matiere::findOrFail($id);
-        // $matiereProfesseur = MatiereProfesseur::with('professeur')->where('annee_academique_id', $anneeAcademique->id)
-        //     ->where('matiere_id', $matiere->id)
-        //     ->where('classe_id', $matiere->classe->id)
-        //     ->first();
-        
-        // $professeur = $matiereProfesseur->professeur;
-
-        foreach($request->except('_token', 'session', 'systeme') as $etudiantId => $noteSession2) {
-            $etudiant = User::findOrFail($etudiantId);
-            $notes = Note::where('annee_academique_id', $anneeAcademique->id)
-                ->where('classe_id', $matiere->classe->id)
-                ->where('matiere_id', $matiere->id)
-                ->where('user_id', $etudiant->id)->first();
-
-            if(!is_null($notes)) {
-                if(!is_null($notes->notes_selectionnees)) {
-                    $sommeNote = 0;
-                    $moyenne = 0;
-                    if($request->systeme == 'normal') {
-                        foreach($notes->notes_selectionnees as $note_x) {
-                            $note_x == 'note_1' ? $sommeNote += $notes->note_1 : '';
-                            $note_x == 'note_2' ? $sommeNote += $notes->note_2 : '';
-                            $note_x == 'note_3' ? $sommeNote += $notes->note_3 : '';
-                            $note_x == 'note_4' ? $sommeNote += $notes->note_4 : '';
-                            $note_x == 'note_5' ? $sommeNote += $notes->note_5 : '';
-                            $note_x == 'note_6' ? $sommeNote += $notes->note_6 : '';
-                        }
-    
-                        $moyenne = $sommeNote + $noteSession2 / (count($notes->notes_selectionnees) + 1);
-                    }
-                    else {
-                        foreach($notes->notes_selectionnees as $note_x) {
-                            $note_x == 'note_1' ? $sommeNote += $notes->note_1 : '';
-                            $note_x == 'note_2' ? $sommeNote += $notes->note_2 : '';
-                            $note_x == 'note_3' ? $sommeNote += $notes->note_3 : '';
-                            $note_x == 'note_4' ? $sommeNote += $notes->note_4 : '';
-                            $note_x == 'note_5' ? $sommeNote += $notes->note_5 : '';
-                            $note_x == 'note_6' ? $sommeNote += $notes->note_6 : '';
-                        }
-                        $moyenne = (0.4 * ($sommeNote / count($notes->notes_selectionnees))) + ($noteSession2 * 0.6);
-                    }
-    
-                    $notes->update([
-                        'moyenne' => $moyenne,
-                        'partiel_session_2' => $noteSession2,
-                        'status' => $moyenne >= 10 ? 'admis' : 'ajourné',
-                        'systeme_calcul' => $request->systeme,
-                    ]);
-                }
-                else {
-                    $notes->update([
-                        'moyenne' => $noteSession2,
-                        'partiel_session_2' => $noteSession2,
-                        'status' => $noteSession2 >= 10 ? 'admis' : 'ajourné',
-                        'systeme_calcul' => $request->systeme,
-                    ]);
-                }
-            }
-            else {
-                // Note::create([
-                //     'partiel_session_2' => $noteSession2,
-                //     'systeme_calcul' => $request->systeme,
-                //     'classe_id' => $matiere->classe->id,
-                //     'matiere_id' => $matiere->id,
-                //     'user_id' => $etudiant->id,
-                //     'professeur_id' => $professeur->id,
-                //     'annee_academique_id' => $anneeAcademique->id
-                // ]);
-
-                dd('SomeThing gone wrong');
-            }
-            
-        }
-
-        flashy('Note Session 2 insérées !');
-        return redirect()->back();
-    } 
 
     public function listeClassesBulletin($session) {
         $classes = Classe::where('nom', 'not like', '%bts%')->orderBy('nom', 'ASC')->get();

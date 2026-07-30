@@ -21,6 +21,7 @@ class DeliberationMatiereListe extends Component
         // $this->matieres = Matiere::where('classe_id', $this->classe['id'])->orderBy('nom', 'ASC')->get();
         $this->matieres = $this->classe->matieres;
         $this->ues = $this->classe->uniteEnseignements->unique();
+        $this->annee = getSelectedAnneeAcademique() ?? getLastAnneeAcademique();
         // $this->ues = $this->matieres->groupBy('uniteEnseignement.nom')->toArray();
         // $this->ues = array_unique(array_column($this->classe->uniteEnseignements->toArray(), 'nom'));
         // dd($this->ues, $this->classe->uniteEnseignements->unique());

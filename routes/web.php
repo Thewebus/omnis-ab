@@ -157,9 +157,9 @@ Route::group(['prefix' => 'informaticien', 'middleware' => ['auth:admins', 'info
 
     Route::group(['prefix' => 'rattrapage'], function() {
         Route::get('list', [RattrapageNoteController::class, 'index'])->name('admin.rattrapage.index');
-        Route::get('modification/{rattrage_id}', [RattrapageNoteController::class, 'modifNote'])->name('admin.rattrapage.modification');
-        Route::post('modification/{rattrage_id}', [RattrapageNoteController::class, 'postModifNote'])->name('admin.rattrapage.post-modification');
-        Route::post('suppression/{rattrage_id}', [RattrapageNoteController::class, 'destroy'])->name('admin.rattrapage.suppression-rattrapage');
+        Route::get('modification/{rattrage_id}', [RattrapageNoteController::class, 'modifNote'])->name('admin.rattrapage.modification')->middleware('can:gerer-rattrapage');
+        Route::post('modification/{rattrage_id}', [RattrapageNoteController::class, 'postModifNote'])->name('admin.rattrapage.post-modification')->middleware('can:gerer-rattrapage');
+        Route::post('suppression/{rattrage_id}', [RattrapageNoteController::class, 'destroy'])->name('admin.rattrapage.suppression-rattrapage')->middleware('can:gerer-rattrapage');
         Route::get('inscrit', [RattrapageNoteController::class, 'inscrit'])->name('admin.rattrapage.inscrit');
         Route::post('inscrit', [RattrapageNoteController::class, 'storeInscrit'])->name('admin.rattrapage.store-inscrit');
         Route::get('non-inscrit', [RattrapageNoteController::class, 'nonInscrit'])->name('admin.rattrapage.non-inscrit');
@@ -192,7 +192,6 @@ Route::group(['prefix' => 'informaticien/notes', 'middleware' => ['auth:admins',
     
     // Route::get('/notes-partiel/{matiere_id}', [InformatiqueController::class, 'addPartiel'])->name('admin.notes-partiel');
     // Route::post('/notes-partiel/{matiere_id}', [InformatiqueController::class, 'postPartiel'])->name('admin.post-notes-partiel');
-    Route::post('/notes-session-2/{matiere_id}', [InformatiqueController::class, 'postSession2'])->name('admin.notes-session-2');
 
     Route::get('/nouvelles-notes/{matiere_id}', [InformatiqueController::class, 'addNote'])->name('admin.add-notes');
     Route::post('/nouvelles-notes/{matiere_id}', [InformatiqueController::class, 'postNote'])->name('admin.post-notes');

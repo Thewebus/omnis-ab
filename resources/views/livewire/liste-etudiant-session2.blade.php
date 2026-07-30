@@ -1,70 +1,56 @@
-<div class="col-4">
-    @if (!is_null($dataNotes))
-        <h6>Matière: {{ $matiere->nom }}</h6>
-        <form wire:submit.prevent="postSession2({{ $matiere->id }})" method="post">
-            @csrf
-            @if (session()->has('message'))
-                <div class="my-3">
-                    <div class="alert alert-success">
-                        {{ session('message') }}
-                    </div>
-                </div>
-            @endif
-            <div class="table-responsive">
-                <table class="table">
-                    <thead class="bg-primary">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom & Prénoms</th>
-                            <th scope="col">Partiel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- <tr>
-                            <td>#</td>
-                            <td>SYSTEME DE CALCULE</td>
-                            <td>
-                                <div class="form-group m-t-10 m-checkbox-inline mb-0 custom-radio-ml">
-                                    <div class="radio radio-primary">
-                                        <input class="radio_animated" id="normal" type="radio" wire:model="systeme" value="normal" checked>
-                                        <label class="mb-0" for="normal">NML</label>
-                                    </div>
-                                    <div class="radio radio-primary">
-                                        <input class="radio_animated" id="lmd" type="radio" wire:model="systeme" value="lmd">
-                                        <label class="mb-0" for="lmd">LMD</label>
-                                    </div>
-                                </div>
-                                @error('systeme')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </td>
-                        </tr> --}}
-                        @foreach ($dataNotes as $dataNote)
+<div class="col-4 table-wrapper-scroll-y my-custom-scrollbar">
+    @if (!empty($ueId))
+        <h6>UE : {{ $ueNom }}</h6>
+
+        @if (session()->has('message'))
+            <div class="my-3"><div class="alert alert-success">{{ session('message') }}</div></div>
+        @endif
+        @if (session()->has('error'))
+            <div class="my-3"><div class="alert alert-danger">{{ session('error') }}</div></div>
+        @endif
+
+        @if (!empty($dataEtudiants))
+            <form wire:submit.prevent="postSession2">
+                @csrf
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="bg-primary">
                             <tr>
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $dataNote['nom_etudiant']['fullname'] }}</td>
-                                <td>
-                                    <input class="form-control @error('partiel_session_2') is-invalid @enderror" wire:model="notes.{{ $dataNote['nom_etudiant']['id'] }}" type="number" step="0.01" required placeholder="0" />
-                                    @error('notes.' . $dataNote['nom_etudiant']['id'])
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Nom & Prénoms</th>
+                                <th scope="col">Matière(s)</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-block my-3 float-right">
-                    <i class="fa fa-save"></i> Enregistrez les notes
-                </button>
-            </div>
-        </form>
+                        </thead>
+                        <tbody>
+                            @foreach ($dataEtudiants as $etudiant)
+                                <tr>
+                                    <th scope="row">{{ $loop->iteration }}</th>
+                                    <td>{{ $etudiant['fullname'] }}</td>
+                                    <td>
+                                        @foreach ($etudiant['matieres'] as $matiere)
+                                            <div class="mb-2">
+                                                <label class="mb-0">{{ $matiere['nom'] }}</label>
+                                                <input class="form-control" type="number" step="0.01" min="0" max="20"
+                                                    wire:model="notes.{{ $etudiant['id'] }}.{{ $matiere['id'] }}"
+                                                    placeholder="Note session 2" />
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-block my-3 float-right">
+                        <i class="fa fa-save"></i> Enregistrer les notes
+                    </button>
+                </div>
+            </form>
+        @else
+            <h4 class="mt-5">Aucun étudiant à repasser pour cette UE.</h4>
+        @endif
     @else
-        <h4 class="mt-5">Selectionner une matière.</h4>
+        <h4 class="mt-5">Sélectionner une UE.</h4>
     @endif
 </div>
